@@ -45,7 +45,7 @@ public class Test {
         for ( int i = 0; i < this.loop; i++ )
         {
             assertEquals(StaticValue.HEXA_STRING_ARRAY.get(i%17), HexAndByteArray.ByteToHexUseLookUpTable1(StaticValue.BYTE_STRING_ARRAY.get(i%17)));
-        } 
+        }  
         end = System.currentTimeMillis();
         double resultTime = (end - start) / 1000.0;
         System.out.println("lookup table(String[]) 사용 변환 시간 : " + resultTime + "   ");
