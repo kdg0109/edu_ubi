@@ -1,0 +1,6 @@
+2018-05-28 19:36:40 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(HexString -> ByteArray) 변환 시간 : 1.157
+2018-05-28 19:36:40 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(ByteArray -> HexString) 변환 시간 : 0.206
+2018-05-28 19:37:35 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(HexString -> ByteArray) 변환 시간 : 1.233
+2018-05-28 19:37:35 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(ByteArray -> HexString) 변환 시간 : 0.191
+2018-05-28 19:38:40 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(ByteArray -> HexString) 변환 시간 : 0.22
+2018-05-28 19:38:41 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(HexString -> ByteArray) 변환 시간 : 0.989

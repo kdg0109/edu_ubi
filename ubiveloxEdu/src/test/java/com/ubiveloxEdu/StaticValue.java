@@ -1,4 +1,4 @@
-package com.ubivelox.changehexa.test;
+package com.ubiveloxEdu;
 
 import java.util.ArrayList;
 

@@ -36,7 +36,7 @@ public class HexAndByteArray
 
         byte[] byteArr = new byte[hexStr.length() / 2];
 
-        byte evenNum = 0; // Â¦¼ö(µÎ ±ÛÀÚ Áß ¾Õ)
+        byte evenNum = 0; // ì§ìˆ˜(ë‘ ê¸€ì ì¤‘ ì•)
         for ( int i = 0; i < hexStr.length(); i += 2 )
         {
 
@@ -50,7 +50,7 @@ public class HexAndByteArray
 
 
 
-    // NullÀÎÁö Length°¡ 0ÀÎÁö È¦¼ö ±æÀÌ ÀÎÁö
+    // Nullì¸ì§€ Lengthê°€ 0ì¸ì§€ í™€ìˆ˜ ê¸¸ì´ ì¸ì§€
     private static void checkNLO(final Object obj, final int length) throws UbiveloxException
     {
         if ( obj == null )

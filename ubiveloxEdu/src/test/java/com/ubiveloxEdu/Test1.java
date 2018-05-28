@@ -1,4 +1,4 @@
-package com.ubivelox.changehexa.test;
+package com.ubiveloxEdu;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -12,17 +12,17 @@ import com.ubivelox.changehexa.HexAndByteArray;
 import com.ubivelox.changehexa.exception.UbiveloxException;
 import com.ubivelox.contents.LookUpTable;
 
-public class Test
+public class Test1
 {
     int                         loop   = 500000;
 
-    private static final Logger logger = LoggerFactory.getLogger(Test.class);
+    private static final Logger logger = LoggerFactory.getLogger(Test1.class);
 
 
 
 
 
-    // °ü·Ã °´Ã¼ Á¤º¸ ÃÊ±âÈ­
+    // ê´€ë ¨ ê°ì²´ ì •ë³´ ì´ˆê¸°í™”
     @BeforeClass
     public static void setUpBeforeClass() throws Exception
     {
@@ -46,8 +46,8 @@ public class Test
         }
         end = System.currentTimeMillis();
         double resultTime = (end - start) / 1000.0;
-        logger.info("lookup table(ByteArray -> HexString) º¯È¯ ½Ã°£ : " + resultTime);
-        // System.out.println("lookup table(ByteArray -> HexString) º¯È¯ ½Ã°£ : " + resultTime);
+        logger.info("lookup table(ByteArray -> HexString) ë³€í™˜ ì‹œê°„ : " + resultTime);
+        // System.out.println("lookup table(ByteArray -> HexString) ë³€í™˜ ì‹œê°„ : " + resultTime);
     }
 
 
@@ -67,8 +67,8 @@ public class Test
 
         end = System.currentTimeMillis();
         double resultTime = (end - start) / 1000.0;
-        logger.info("lookup table(HexString -> ByteArray) º¯È¯ ½Ã°£ : " + resultTime);
-        // System.out.println("lookup table(HexString -> ByteArray) º¯È¯ ½Ã°£ : " + resultTime);
+        logger.info("lookup table(HexString -> ByteArray) ë³€í™˜ ì‹œê°„ : " + resultTime);
+        // System.out.println("lookup table(HexString -> ByteArray) ë³€í™˜ ì‹œê°„ : " + resultTime);
     }
 
 
@@ -79,7 +79,7 @@ public class Test
     public void testError() throws UbiveloxException
     {
 
-        // byte[] ¿¡·¯ È®ÀÎ
+        // byte[] ì—ëŸ¬ í™•ì¸
         // byte[] == null
         try
         {
@@ -102,7 +102,7 @@ public class Test
             assertEquals("Is Empty", e.getMessage());
         }
 
-        // HexaString ¿¡·¯ È®ÀÎ
+        // HexaString ì—ëŸ¬ í™•ì¸
         // HexaString == null
 
         try
@@ -126,9 +126,9 @@ public class Test
             assertEquals("Is Empty", e.getMessage());
         }
 
-        // HexaString == È¦¼ö
+        // HexaString == í™€ìˆ˜
         StringBuffer oddHexStr1 = new StringBuffer("a");
-        // È¦¼ö 30°³ Ã¼Å©
+        // í™€ìˆ˜ 30ê°œ ì²´í¬
         for ( int i = 0; i < 30; i++ )
         {
             oddHexStr1.append("aa");
@@ -165,7 +165,7 @@ public class Test
 
         try
         {
-            LookUpTable.hexMapping('°¡');
+            LookUpTable.hexMapping('ê°€');
             fail();
         }
         catch ( UbiveloxException e )
@@ -175,7 +175,7 @@ public class Test
 
         try
         {
-            LookUpTable.hexMapping('ÆR');
+            LookUpTable.hexMapping('í£');
             fail();
         }
         catch ( UbiveloxException e )
