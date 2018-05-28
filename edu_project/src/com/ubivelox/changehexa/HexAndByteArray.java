@@ -15,6 +15,8 @@ public class HexAndByteArray
     public static String ByteToHex(final byte[] byteArr) throws UbiveloxException
     {
 
+        checkNLO(byteArr, byteArr == null ? 0 : byteArr.length);
+
         StringBuffer hexStr = new StringBuffer();
 
         for ( byte byteVal : byteArr )
@@ -31,7 +33,9 @@ public class HexAndByteArray
 
     public static String ByteToHexUseLookUpTable1(final byte[] byteArr) throws UbiveloxException
     {
-        StringBuffer hexStr = new StringBuffer();
+        checkNLO(byteArr, byteArr == null ? 0 : byteArr.length);
+
+        StringBuffer hexStr = new StringBuffer(byteArr.length * 2);
 
         for ( byte byteVal : byteArr )
         {
@@ -45,16 +49,49 @@ public class HexAndByteArray
 
 
 
-    public static String ByteToHexUseLookUpTable2(final byte[] byteArr) throws UbiveloxException
+    public static byte[] HexToByteUseLookUpTable(final String hexStr) throws UbiveloxException
     {
-        StringBuffer hexStr = new StringBuffer();
+        checkNLO(hexStr, hexStr == null ? 0 : hexStr.length());
 
-        for ( byte byteVal : byteArr )
+        String hexStrUpper = hexStr.toUpperCase();
+
+        byte[] byteArr = new byte[hexStrUpper.length() / 2];
+
+        for ( int i = 0; i < hexStrUpper.length(); i += 2 )
         {
-            hexStr.append(lookUp.hashmapping(byteVal));
+            byteArr[i / 2] = lookUp.equal(hexStrUpper.substring(i, i + 2)); // 구한 값을 바이트로 변환하여 저장
         }
 
-        return hexStr.toString();
+        return byteArr;
+    }
+
+
+
+
+
+    public static byte[] HexToByteUseLookUpTable2(final String hexStr) throws UbiveloxException
+    {
+        checkNLO(hexStr, hexStr == null ? 0 : hexStr.length());
+
+        byte[] byteArr = new byte[hexStr.length() / 2];
+
+        byte evenNum = 0; // 짝수(두 글자 중 앞)
+        byte oddNum = 0; // 홀수(두 글자 중 뒤)
+        for ( int i = 0; i < hexStr.length(); i++ )
+        {
+            oddNum = (lookUp.hexMapping(hexStr.charAt(i)));
+
+            if ( i % 2 == 0 )
+            {
+                evenNum = (byte) (oddNum * 16);
+            }
+            else
+            {
+                byteArr[i / 2] = (byte) (evenNum + oddNum);
+            }
+        }
+
+        return byteArr;
     }
 
 
@@ -102,6 +139,7 @@ public class HexAndByteArray
             {
                 hexaTmp += byteValTmp % 16;
             }
+
             if ( hexaStrSecond.length() <= 0 )
             {
                 hexaStrSecond = hexaTmp;
@@ -118,5 +156,26 @@ public class HexAndByteArray
         return hexStr.append(hexaStrFirst)
                      .append(hexaStrSecond)
                      .toString();
+    }
+
+
+
+
+
+    // Null인지 Length가 0인지 홀수 길이 인지
+    private static void checkNLO(final Object obj, final int length) throws UbiveloxException
+    {
+        if ( obj == null )
+        {
+            throw new UbiveloxException("Is null");
+        }
+        if ( length == 0 )
+        {
+            throw new UbiveloxException("Is Empty");
+        }
+        if ( obj instanceof String && length % 2 != 0 )
+        {
+            throw new UbiveloxException("Length is Odd Number");
+        }
     }
 }

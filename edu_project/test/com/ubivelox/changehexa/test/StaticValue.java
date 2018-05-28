@@ -13,7 +13,7 @@ public class StaticValue
 
     public static void setArrayValues()
     {
-        BYTE_STRING_ARRAY.add(new byte[] { 'm', 'e', 'a', 'n', 'i', 'n', 'g' });
+        BYTE_STRING_ARRAY.add(new byte[] { (byte) 0x81, (byte) 0xFF, 'a', 'n', 'i', 'n', 'g' });
         BYTE_STRING_ARRAY.add(new byte[] { 'a', 'p', 'p', 'l', 'e' });
         BYTE_STRING_ARRAY.add(new byte[] { 'u', 'b', 'i', 'v', 'e', 'l', 'o', 'x' });
         BYTE_STRING_ARRAY.add(new byte[] { 'o', 'n', 'l', 'i', 'n', 'e' });
@@ -40,7 +40,7 @@ public class StaticValue
                                            ',', ' ', 'e', 's', 'c', 'a', 'p', 'i', 'n', 'g', ' ', 'o', 'r', ' ', 'u', 'n', 'e', 's', 'c', 'a', 'p', 'i', 'n', 'g', ' ', 'o', 'f', ' ', 't', 'e', 'x',
                                            't', ' ', 'a', 'n', 'd', ' ', 'd', 'a', 't', 'a', '.' });
 
-        HEXA_STRING_ARRAY.add("6D65616E696E67");
+        HEXA_STRING_ARRAY.add("81FF616E696E67");
         HEXA_STRING_ARRAY.add("6170706C65");
         HEXA_STRING_ARRAY.add("75626976656C6F78");
         HEXA_STRING_ARRAY.add("6F6E6C696E65");
@@ -60,19 +60,5 @@ public class StaticValue
         HEXA_STRING_ARRAY.add("596F7572207465737420636C61737320757365732061206D6978206F66204A556E6974203420616E64203520616E6E6F746174696F6E73");
 
         HEXA_STRING_ARRAY.add("517569636B206F6E6C696E6520656E636F64696E672C206465636F64696E672C206573636170696E67206F7220756E6573636170696E67206F66207465787420616E6420646174612E");
-    }
-
-    public static class ByteString
-    {
-        public final static byte[] BYTE_STRING1 = { 'm', 'e', 'a', 'n', 'i', 'n', 'g' };
-        public final static byte[] BYTE_STRING2 = { 'a', 'p', 'p', 'l', 'e' };
-        public final static byte[] BYTE_STRING3 = { 'u', 'b', 'i', 'v', 'e', 'l', 'o', 'x' };
-    }
-
-    public static class HexaString
-    {
-        public final static String HEXA_STRING1 = "6D65616E696E67";
-        public final static String HEXA_STRING2 = "6170706C65";
-        public final static String HEXA_STRING3 = "75626976656C6F78";
     }
 }
