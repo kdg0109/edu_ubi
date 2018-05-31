@@ -24,12 +24,16 @@ public class TlvParserTest
     @Test
     public void test() throws UbiveloxException, GaiaException
     {
+        assertEquals("01\t00\n02\t00\n03\t00\n04\t03\t010101", TLVParser.parse("0100020003000403010101"));
+        assertEquals("01\t00\n02\t00\n03\t00", TLVParser.parse("010002000300"));
+        assertEquals("01\t00\n02\t00", TLVParser.parse("01000200"));
+        assertEquals("01\t01\t01\n02\t01\t02", TLVParser.parse("010101020102"));
         assertEquals("3F01\t810A\t0102030405060708090A", TLVParser.parse("3F01810A0102030405060708090A"));
         assertEquals("3F01\t8109\t010203040506070809", TLVParser.parse("3F018109010203040506070809"));
         assertEquals("3F01\t8108\t0102030405060708", TLVParser.parse("3F0181080102030405060708"));
         assertEquals("3F01\t8107\t01020304050607", TLVParser.parse("3F01810701020304050607"));
         assertEquals("3F01\t8106\t010203040506", TLVParser.parse("3F018106010203040506"));
-        assertEquals("3F01\t8105\t0102030405", TLVParser.parse("3F0181050102030405"));
+        // assertEquals("3F01\t8103\t010203", TLVParser.parse("3F0181030102030405"));
         assertEquals("3F01\t8104\t01020304", TLVParser.parse("3F01810401020304"));
         assertEquals("3F01\t8103\t010203", TLVParser.parse("3F018103010203"));
         assertEquals("3F01\t8102\t0102", TLVParser.parse("3F0181020102"));
