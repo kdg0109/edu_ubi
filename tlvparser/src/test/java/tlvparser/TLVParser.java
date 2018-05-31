@@ -7,15 +7,19 @@ import com.ubivelox.gaia.GaiaException;
 import com.ubivelox.gaia.util.GaiaUtils;
 
 import exception.UbiveloxException;
+import lombok.Data;
 
+@Data
 public class TLVParser
 {
 
-    final static int            PRIMITIVE   = 0x01;
-    final static int            CONSTRUCTED = 0x02;
+    public enum ValueType
+    {
+        PRIMITIVE,
+        CONSTRUCTED;
+    }
 
-    private final int           valueType   = PRIMITIVE;
-    private static final Logger logger      = LoggerFactory.getLogger(TlvParserTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(TlvParserTest.class);
 
 
 
@@ -24,7 +28,7 @@ public class TLVParser
     public static String parse(final String hexString) throws UbiveloxException, GaiaException
     {
 
-        int valueType = PRIMITIVE;
+        ValueType valueType = ValueType.PRIMITIVE;
         String outPut = "";
 
         int tSize = 0;
@@ -50,11 +54,11 @@ public class TLVParser
             // primitive와 constructed 구분
             if ( ((byteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
             {
-                valueType = CONSTRUCTED;
+                valueType = ValueType.CONSTRUCTED;
             }
             else
             {
-                valueType = PRIMITIVE;
+                valueType = ValueType.PRIMITIVE;
             }
 
             lSize = getLengthSize(byteArray, byteArrayPosition);
@@ -73,15 +77,20 @@ public class TLVParser
             throw new UbiveloxException("Value Range is not exist");
         }
 
-        vSize = byteArray[byteArrayPosition];
-        // System.out.println("val 사이즈 : " + vSize);
         /*
          *
          * value 처리부분
          *
          */
+        vSize = byteArray[byteArrayPosition] * 2;
+        // System.out.println("vSize : " + vSize);
 
-        return outPut + "\t" + hexString.substring((tSize + lSize), hexString.length());
+        if ( (tSize + lSize + vSize) > hexString.length() )
+        {
+            throw new UbiveloxException("Value Range is not enough");
+        }
+
+        return outPut + "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
     }
 
 
