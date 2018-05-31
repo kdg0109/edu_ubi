@@ -51,7 +51,7 @@ public class LookUpTable
     {
         if ( val > BYTE_ARRAY.length )
         {
-            throw new UbiveloxException("Incorrect Hexa String Range");
+            throw new UbiveloxException("Incorrect Hexa String Range Overflow");
         }
 
         if ( BYTE_ARRAY[val] != -1 )
@@ -68,7 +68,7 @@ public class LookUpTable
 
 
 
-    public static String mapping(final byte dec)
+    public String mapping(final byte dec)
     {
         return HEX_ARRAY[dec & 0xff];
     }

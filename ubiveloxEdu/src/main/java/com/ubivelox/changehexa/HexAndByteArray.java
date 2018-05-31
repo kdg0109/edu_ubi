@@ -14,7 +14,7 @@ public class HexAndByteArray
 
     public static String ByteToHexUseLookUpTable(final byte[] byteArr) throws UbiveloxException
     {
-        checkNLO(byteArr, byteArr == null ? 0 : byteArr.length);
+        checkNLO(byteArr, byteArr == null ? 0 : byteArr.length, "ByteArray");
 
         StringBuffer hexStr = new StringBuffer(byteArr.length * 2);
 
@@ -32,7 +32,7 @@ public class HexAndByteArray
 
     public static byte[] HexToByteUseLookUpTable(final String hexStr) throws UbiveloxException
     {
-        checkNLO(hexStr, hexStr == null ? 0 : hexStr.length());
+        checkNLO(hexStr, hexStr == null ? 0 : hexStr.length(), "HexaString");
 
         byte[] byteArr = new byte[hexStr.length() / 2];
 
@@ -51,19 +51,19 @@ public class HexAndByteArray
 
 
     // Null인지 Length가 0인지 홀수 길이 인지
-    private static void checkNLO(final Object obj, final int length) throws UbiveloxException
+    private static void checkNLO(final Object obj, final int length, final String type) throws UbiveloxException
     {
         if ( obj == null )
         {
-            throw new UbiveloxException("Is null");
+            throw new UbiveloxException(type + " is null");
         }
         if ( length == 0 )
         {
-            throw new UbiveloxException("Is Empty");
+            throw new UbiveloxException(type + " is Empty");
         }
         if ( obj instanceof String && length % 2 != 0 )
         {
-            throw new UbiveloxException("Length is Odd Number");
+            throw new UbiveloxException(type + " length is Odd Number");
         }
     }
 }

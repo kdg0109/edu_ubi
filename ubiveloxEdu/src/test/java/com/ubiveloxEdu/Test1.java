@@ -88,7 +88,7 @@ public class Test1
         }
         catch ( UbiveloxException e )
         {
-            assertEquals("Is null", e.getMessage());
+            assertEquals("ByteArray is null", e.getMessage());
         }
 
         // byte[].length == 0
@@ -99,7 +99,7 @@ public class Test1
         }
         catch ( UbiveloxException e )
         {
-            assertEquals("Is Empty", e.getMessage());
+            assertEquals("ByteArray is Empty", e.getMessage());
         }
 
         // HexaString 에러 확인
@@ -112,7 +112,7 @@ public class Test1
         }
         catch ( UbiveloxException e )
         {
-            assertEquals("Is null", e.getMessage());
+            assertEquals("HexaString is null", e.getMessage());
         }
 
         // HexaString.length == 0
@@ -123,7 +123,7 @@ public class Test1
         }
         catch ( UbiveloxException e )
         {
-            assertEquals("Is Empty", e.getMessage());
+            assertEquals("HexaString is Empty", e.getMessage());
         }
 
         // HexaString == 홀수
@@ -139,7 +139,7 @@ public class Test1
             }
             catch ( UbiveloxException e )
             {
-                assertEquals("Length is Odd Number", e.getMessage());
+                assertEquals("HexaString length is Odd Number", e.getMessage());
             }
         }
 
@@ -152,7 +152,26 @@ public class Test1
         {
             assertEquals("Incorrect Hexa String Range", e.getMessage());
         }
+        try
+        {
+            LookUpTable.hexMapping((char) 2);
+            fail();
+        }
+        catch ( UbiveloxException e )
+        {
+            assertEquals("Incorrect Hexa String Range", e.getMessage());
+        }
+        try
+        {
+            LookUpTable.hexMapping((char) 254);
+            fail();
+        }
+        catch ( UbiveloxException e )
+        {
+            assertEquals("Incorrect Hexa String Range", e.getMessage());
+        }
 
+        // lookup table 범위를 벗어날 때
         try
         {
             LookUpTable.hexMapping((char) 256);
@@ -160,7 +179,7 @@ public class Test1
         }
         catch ( UbiveloxException e )
         {
-            assertEquals("Incorrect Hexa String Range", e.getMessage());
+            assertEquals("Incorrect Hexa String Range Overflow", e.getMessage());
         }
 
         try
@@ -170,7 +189,7 @@ public class Test1
         }
         catch ( UbiveloxException e )
         {
-            assertEquals("Incorrect Hexa String Range", e.getMessage());
+            assertEquals("Incorrect Hexa String Range Overflow", e.getMessage());
         }
 
         try
@@ -180,7 +199,7 @@ public class Test1
         }
         catch ( UbiveloxException e )
         {
-            assertEquals("Incorrect Hexa String Range", e.getMessage());
+            assertEquals("Incorrect Hexa String Range Overflow", e.getMessage());
         }
     }
 }

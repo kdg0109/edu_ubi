@@ -1,0 +1,2 @@
+2018-05-30 13:10:25 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(HexString -> ByteArray) 변환 시간 : 1.147
+2018-05-30 13:10:26 [main] INFO  com.ubiveloxEdu.Test1 - lookup table(ByteArray -> HexString) 변환 시간 : 0.202
