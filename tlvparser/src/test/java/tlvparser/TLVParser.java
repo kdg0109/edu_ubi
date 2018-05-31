@@ -11,11 +11,11 @@ import exception.UbiveloxException;
 public class TLVParser
 {
 
-    final static int            PRIMITIVE = 0x01;
-    final static int            CONSTRUCT = 0x02;
+    final static int            PRIMITIVE   = 0x01;
+    final static int            CONSTRUCTED = 0x02;
 
-    public static int           valueType = PRIMITIVE;
-    private static final Logger logger    = LoggerFactory.getLogger(TlvParserTest.class);
+    private final int           valueType   = PRIMITIVE;
+    private static final Logger logger      = LoggerFactory.getLogger(TlvParserTest.class);
 
 
 
@@ -23,10 +23,13 @@ public class TLVParser
 
     public static String parse(final String hexString) throws UbiveloxException, GaiaException
     {
+
+        int valueType = PRIMITIVE;
         String outPut = "";
 
         int tSize = 0;
         int lSize = 0;
+        int vSize = 0;
         int byteArrayPosition = 0;
 
         // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
@@ -44,12 +47,21 @@ public class TLVParser
         }
         else
         {
+            // primitive와 constructed 구분
+            if ( ((byteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
+            {
+                valueType = CONSTRUCTED;
+            }
+            else
+            {
+                valueType = PRIMITIVE;
+            }
+
             lSize = getLengthSize(byteArray, byteArrayPosition);
             byteArrayPosition = ((tSize + lSize) / 2) - 1;
 
             outPut += hexString.substring(0, tSize) + "\t" + hexString.substring(tSize, tSize + lSize);
         }
-
         // length가 0이면 val없이 output
         if ( byteArray[byteArrayPosition] == 0 )
         {
@@ -61,6 +73,8 @@ public class TLVParser
             throw new UbiveloxException("Value Range is not exist");
         }
 
+        vSize = byteArray[byteArrayPosition];
+        // System.out.println("val 사이즈 : " + vSize);
         /*
          *
          * value 처리부분
@@ -80,14 +94,6 @@ public class TLVParser
         GaiaUtils.checkNullOrEmpty(byteArray);
 
         int tSize = 2;
-        if ( ((byteArray[byteArrPos]) & 0b0010_0000) == 0b0010_0000 )
-        {
-            valueType = CONSTRUCT;
-        }
-        else
-        {
-            valueType = PRIMITIVE;
-        }
 
         if ( ((byteArray[byteArrPos]) & 0b0001_1111) == 0b0001_1111 )
         {
