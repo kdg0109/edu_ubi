@@ -30,15 +30,9 @@ public class TLVParser
         int byteArrayPosition = 0;
 
         // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
-        GaiaUtils.checkNullOrEmpty(hexString);
         GaiaUtils.checkHexaString(hexString);
 
         byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
-
-        if ( byteArray[byteArrayPosition] == 0 )
-        {
-            throw new UbiveloxException("Tag is not correct");
-        }
 
         tSize = getTagSize(byteArray, byteArrayPosition);
         byteArrayPosition = tSize / 2;
@@ -86,7 +80,7 @@ public class TLVParser
         GaiaUtils.checkNullOrEmpty(byteArray);
 
         int tSize = 2;
-        if ( ((byteArray[byteArrPos] & 0xff) & 0x20) == 0x20 )
+        if ( ((byteArray[byteArrPos]) & 0b0010_0000) == 0b0010_0000 )
         {
             valueType = CONSTRUCT;
         }
@@ -95,10 +89,10 @@ public class TLVParser
             valueType = PRIMITIVE;
         }
 
-        if ( ((byteArray[byteArrPos] & 0xff) & 0x1f) == 0x1f )
+        if ( ((byteArray[byteArrPos]) & 0b0001_1111) == 0b0001_1111 )
         {
             tSize += 2;
-            for ( int i = byteArrPos + 1; (byteArray[i] & 0xff) >= 0x80; i++ )
+            for ( int i = byteArrPos + 1; (byteArray[i] & 0b1000_0000) == 0b1000_0000; i++ )
             {
                 tSize += 2;
                 if ( tSize >= 6 )
@@ -140,41 +134,4 @@ public class TLVParser
 
         return lSize;
     }
-
-
-
-
-
-    // public static byte[] HexToByte(final String hexStr) throws UbiveloxException
-    // {
-    // checkNLO(hexStr, hexStr == null ? 0 : hexStr.length(), "HexaString");
-    //
-    // byte[] byteArr = new byte[hexStr.length() / 2];
-    //
-    // byte evenNum = 0;
-    // for ( int i = 0; i < hexStr.length(); i += 2 )
-    // {
-    //
-    // byteArr[i / 2] = (byte) ((byte) ((lookUp.hexMapping(hexStr.charAt(i))) * 16) + lookUp.hexMapping(hexStr.charAt(i + 1)));
-    //
-    // }
-    // return byteArr;
-    // }
-
-    private static void checkNLO(final Object obj, final int length, final String type) throws UbiveloxException
-    {
-        if ( obj == null )
-        {
-            throw new UbiveloxException(type + " is null");
-        }
-        if ( length == 0 )
-        {
-            throw new UbiveloxException(type + " is Empty");
-        }
-        if ( obj instanceof String && length % 2 != 0 )
-        {
-            throw new UbiveloxException(type + " length is Odd Number");
-        }
-    }
-
 }
