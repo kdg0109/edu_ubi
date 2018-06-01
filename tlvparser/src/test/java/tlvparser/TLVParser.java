@@ -1,7 +1,5 @@
 package tlvparser;
 
-import java.io.ByteArrayInputStream;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +33,7 @@ public class TLVParser
         int index = 0;
         String hexString = hexStringOrg;
         TLVResultNBytePosition parseOne;
-        ByteArrayInputStream byteArrayInputStrem;
-        byte[] newByteArray;
+        int tlvIndex = 0;
         byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
 
         do
@@ -50,19 +47,14 @@ public class TLVParser
                 int tSize = 0;
                 int lSize = 0;
                 int vSize = 0;
-                int byteArrayPosition = 0;
+                int byteArrayPosition = tlvIndex;
 
-                byteArrayInputStrem = new ByteArrayInputStream(byteArray);
-                newByteArray = new byte[hexString.length() / 2];
-                byteArrayInputStrem.read(newByteArray, (index == 0 ? 0 : (index / 2 - 2)), newByteArray.length - 1);
-                System.out.println("newByteArray : " + newByteArray.length);
                 // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
-                // 원래 여기에 byteArray있었음
 
-                tSize = getTagSize(newByteArray, byteArrayPosition);
-                byteArrayPosition = tSize / 2;
+                tSize = getTagSize(byteArray, byteArrayPosition);
+                byteArrayPosition += tSize / 2;
 
-                if ( newByteArray.length == byteArrayPosition )
+                if ( byteArray.length == byteArrayPosition )
                 {
                     throw new UbiveloxException("Length Range is not exist");
 
@@ -70,7 +62,7 @@ public class TLVParser
                 else
                 {
                     // primitive와 constructed 구분
-                    if ( ((newByteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
+                    if ( ((byteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
                     {
                         valueType = ValueType.CONSTRUCTED;
                     }
@@ -79,15 +71,16 @@ public class TLVParser
                         valueType = ValueType.PRIMITIVE;
                     }
 
-                    lSize = getLengthSize(newByteArray, byteArrayPosition);
-                    byteArrayPosition = ((tSize + lSize) / 2) - 1;
+                    lSize = getLengthSize(byteArray, byteArrayPosition);
+                    byteArrayPosition = ((tSize + lSize) / 2) - 1 + tlvIndex;
 
                     outPut += hexString.substring(0, tSize) + "\t" + hexString.substring(tSize, tSize + lSize);
                 }
                 // length가 0이면 val없이 output
-                if ( newByteArray[byteArrayPosition] == 0 )
+                if ( byteArray[byteArrayPosition] == 0 )
                 {
                     parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition);
+                    tlvIndex += (tSize + lSize + vSize) / 2;
                 }
                 else
                 {
@@ -97,7 +90,7 @@ public class TLVParser
                         throw new UbiveloxException("Value Range is not exist");
                     }
 
-                    vSize = newByteArray[byteArrayPosition] * 2;
+                    vSize = byteArray[byteArrayPosition] * 2;
                     // System.out.println("vSize : " + vSize);
 
                     if ( (tSize + lSize + vSize) > hexString.length() )
@@ -114,13 +107,15 @@ public class TLVParser
 
                     outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
                     parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2));
+                    tlvIndex += (tSize + lSize + vSize) / 2;
                 }
             }
 
             result += (index == 0 ? "" : "\n") + parseOne.tlvResult;
             index = parseOne.byteArrayPosition * 2 + 2;
 
-            hexString = hexString.substring(index);
+            hexString = hexStringOrg.substring(index);
+
         }
         while ( !hexString.isEmpty() );
 
