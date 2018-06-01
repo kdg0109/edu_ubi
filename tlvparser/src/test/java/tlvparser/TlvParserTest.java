@@ -24,6 +24,9 @@ public class TlvParserTest
     @Test
     public void test() throws UbiveloxException, GaiaException
     {
+        assertEquals("3F01\t810A\t0102030405060708090A\n04\t03\t010101", TLVParser.parse("3F01810A0102030405060708090A0403010101"));
+        assertEquals("01\t01\t03\n01\t00\n01\t01\t02", TLVParser.parse("0101030100010102"));
+        assertEquals("01\t01\t03\n01\t01\t02\n01\t01\t02", TLVParser.parse("010103010102010102"));
         assertEquals("01\t00\n02\t00\n03\t00\n04\t03\t010101", TLVParser.parse("0100020003000403010101"));
         assertEquals("01\t00\n02\t00\n03\t00", TLVParser.parse("010002000300"));
         assertEquals("01\t00\n02\t00", TLVParser.parse("01000200"));

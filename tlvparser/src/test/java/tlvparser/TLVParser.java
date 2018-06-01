@@ -25,20 +25,95 @@ public class TLVParser
 
 
 
-    public static String parse(final String hexString) throws UbiveloxException, GaiaException
+    public static String parse(final String hexStringOrg) throws UbiveloxException, GaiaException
     {
-        String result;
-        String hexaStringTmp = hexString;
-        TLVResultNBytePosition parseOne = parseOneTLV(hexaStringTmp);
-        result = parseOne.tlvResult;
-        while ( hexaStringTmp.length() > parseOne.byteArrayPosition * 2 + 2 )
+        GaiaUtils.checkHexaString(hexStringOrg);
+
+        String result = "";
+        int index = 0;
+        String hexString = hexStringOrg;
+        TLVResultNBytePosition parseOne;
+        byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
+
+        do
         {
-            parseOne = parseOneTLV(hexaStringTmp.substring(parseOne.byteArrayPosition * 2 + 2));
-            result += "\n" + parseOne.tlvResult;
 
-            hexaStringTmp = hexaStringTmp.substring(parseOne.byteArrayPosition * 2 + 2);
+            {
 
+                ValueType valueType = ValueType.PRIMITIVE;
+                String outPut = "";
+
+                int tSize = 0;
+                int lSize = 0;
+                int vSize = 0;
+                int byteArrayPosition = 0;
+
+                // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
+
+                tSize = getTagSize(byteArray, byteArrayPosition);
+                byteArrayPosition = tSize / 2;
+
+                if ( byteArray.length == byteArrayPosition )
+                {
+                    throw new UbiveloxException("Length Range is not exist");
+
+                }
+                else
+                {
+                    // primitive와 constructed 구분
+                    if ( ((byteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
+                    {
+                        valueType = ValueType.CONSTRUCTED;
+                    }
+                    else
+                    {
+                        valueType = ValueType.PRIMITIVE;
+                    }
+
+                    lSize = getLengthSize(byteArray, byteArrayPosition);
+                    byteArrayPosition = ((tSize + lSize) / 2) - 1;
+
+                    outPut += hexString.substring(0, tSize) + "\t" + hexString.substring(tSize, tSize + lSize);
+                }
+                // length가 0이면 val없이 output
+                if ( byteArray[byteArrayPosition] == 0 )
+                {
+                    parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition);
+                }
+                else
+                {
+
+                    if ( (tSize + lSize) == hexString.length() )
+                    {
+                        throw new UbiveloxException("Value Range is not exist");
+                    }
+
+                    vSize = byteArray[byteArrayPosition] * 2;
+                    // System.out.println("vSize : " + vSize);
+
+                    if ( (tSize + lSize + vSize) > hexString.length() )
+                    {
+                        throw new UbiveloxException("Value Range is not enough");
+                    }
+
+                    /*
+                     *
+                     * value 처리부분
+                     * 1. return 하기 전에 다음 헥사값이 존재할 때, 현재 TLV의 다음 HexString부터 substring하여 다시 parse를 돈다.
+                     * 2. parse를 다시 돌릴 때, 다음의 HexString과 byteArrayPosition 값을 파라미터로 넘겨줘야 한다.
+                     */
+
+                    outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
+                    parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2));
+                }
+            }
+
+            result += (index == 0 ? "" : "\n") + parseOne.tlvResult;
+            index = parseOne.byteArrayPosition * 2 + 2;
+
+            hexString = hexString.substring(index);
         }
+        while ( !hexString.isEmpty() );
 
         return result;
     }
@@ -133,7 +208,6 @@ public class TLVParser
         int byteArrayPosition = 0;
 
         // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
-        GaiaUtils.checkHexaString(hexString);
 
         byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
 
