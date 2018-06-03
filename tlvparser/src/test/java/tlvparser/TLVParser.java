@@ -30,7 +30,7 @@ public class TLVParser
         GaiaUtils.checkHexaString(hexStringOrg);
 
         String result = "";
-        int index = 0;
+        int hexStringIndex = 0;
         String hexString = hexStringOrg;
         TLVResultNBytePosition parseOne;
         int tlvIndex = 0;
@@ -98,23 +98,16 @@ public class TLVParser
                         throw new UbiveloxException("Value Range is not enough");
                     }
 
-                    /*
-                     *
-                     * value 처리부분
-                     * 1. return 하기 전에 다음 헥사값이 존재할 때, 현재 TLV의 다음 HexString부터 substring하여 다시 parse를 돈다.
-                     * 2. parse를 다시 돌릴 때, 다음의 HexString과 byteArrayPosition 값을 파라미터로 넘겨줘야 한다.
-                     */
-
                     outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
                     parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2));
                     tlvIndex += (tSize + lSize + vSize) / 2;
                 }
             }
 
-            result += (index == 0 ? "" : "\n") + parseOne.tlvResult;
-            index = parseOne.byteArrayPosition * 2 + 2;
+            result += (hexStringIndex == 0 ? "" : "\n") + parseOne.tlvResult;
+            hexStringIndex = parseOne.byteArrayPosition * 2 + 2;
 
-            hexString = hexStringOrg.substring(index);
+            hexString = hexStringOrg.substring(hexStringIndex);
 
         }
         while ( !hexString.isEmpty() );
