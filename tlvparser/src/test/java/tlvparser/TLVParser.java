@@ -21,6 +21,22 @@ public class TLVParser
 
     private static final Logger logger = LoggerFactory.getLogger(TlvParserTest.class);
 
+    static class TLVResultNBytePosition
+    {
+        String tlvResult;
+        int    byteArrayPosition;
+
+
+
+
+
+        public TLVResultNBytePosition(final String tlvResult, final int byteArrayPosition)
+        {
+            this.tlvResult = tlvResult;
+            this.byteArrayPosition = byteArrayPosition;
+        }
+    }
+
 
 
 
@@ -38,7 +54,6 @@ public class TLVParser
 
         do
         {
-
             {
 
                 ValueType valueType = ValueType.PRIMITIVE;
@@ -97,6 +112,17 @@ public class TLVParser
                     {
                         throw new UbiveloxException("Value Range is not enough");
                     }
+
+                    /**
+                     *
+                     * value의 타입
+                     * if(valueType == ValueType.CONSTRUCTED){
+                     *
+                     * } else {
+                     * 
+                     * }
+                     *
+                     */
 
                     outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
                     parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2));
@@ -170,23 +196,6 @@ public class TLVParser
         }
 
         return lSize;
-    }
-
-    static class TLVResultNBytePosition
-    {
-        String tlvResult;
-        int    byteArrayPosition;
-
-
-
-
-
-        public TLVResultNBytePosition(final String tlvResult, final int byteArrayPosition)
-        {
-            this.tlvResult = tlvResult;
-            this.byteArrayPosition = byteArrayPosition;
-        }
-
     }
 
 
