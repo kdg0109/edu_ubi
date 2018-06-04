@@ -43,6 +43,15 @@ public class TLVParser
 
     public static String parse(final String hexStringOrg) throws UbiveloxException, GaiaException
     {
+        return parse(hexStringOrg, 0);
+    }
+
+
+
+
+
+    private static String parse(final String hexStringOrg, final int depth) throws UbiveloxException, GaiaException
+    {
         GaiaUtils.checkHexaString(hexStringOrg);
 
         String result = "";
@@ -56,8 +65,10 @@ public class TLVParser
         {
             {
 
+                int depthLevel = depth;
                 ValueType valueType = ValueType.PRIMITIVE;
                 String outPut = "";
+                String depthTab = "";
 
                 int tSize = 0;
                 int lSize = 0;
@@ -65,6 +76,15 @@ public class TLVParser
                 int byteArrayPosition = tlvIndex;
 
                 // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
+                // primitive와 constructed 구분
+                if ( ((byteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
+                {
+                    valueType = ValueType.CONSTRUCTED;
+                }
+                else
+                {
+                    valueType = ValueType.PRIMITIVE;
+                }
 
                 tSize = getTagSize(byteArray, byteArrayPosition);
                 byteArrayPosition += tSize / 2;
@@ -76,20 +96,16 @@ public class TLVParser
                 }
                 else
                 {
-                    // primitive와 constructed 구분
-                    if ( ((byteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
-                    {
-                        valueType = ValueType.CONSTRUCTED;
-                    }
-                    else
-                    {
-                        valueType = ValueType.PRIMITIVE;
-                    }
 
                     lSize = getLengthSize(byteArray, byteArrayPosition);
                     byteArrayPosition = ((tSize + lSize) / 2) - 1 + tlvIndex;
 
-                    outPut += hexString.substring(0, tSize) + "\t" + hexString.substring(tSize, tSize + lSize);
+                    for ( int i = 0; i < depthLevel; i++ )
+                    {
+                        depthTab += "\t";
+                    }
+
+                    outPut += depthTab + hexString.substring(0, tSize) + "\t" + hexString.substring(tSize, tSize + lSize);
                 }
                 // length가 0이면 val없이 output
                 if ( byteArray[byteArrayPosition] == 0 )
@@ -113,18 +129,19 @@ public class TLVParser
                         throw new UbiveloxException("Value Range is not enough");
                     }
 
-                    /**
-                     *
-                     * value의 타입
-                     * if(valueType == ValueType.CONSTRUCTED){
-                     *
-                     * } else {
-                     *
-                     * }
-                     *
-                     */
+                    // value의 타입
+                    if ( valueType == ValueType.PRIMITIVE )
+                    {
+                        outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
+                    }
+                    else
+                    {
 
-                    outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
+                        depthLevel++;
+
+                        outPut += "\n" + parse(hexString.substring((tSize + lSize), (tSize + lSize + vSize)), depthLevel);
+                    }
+
                     parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2));
                     tlvIndex += (tSize + lSize + vSize) / 2;
                 }

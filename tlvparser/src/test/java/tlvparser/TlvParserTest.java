@@ -24,53 +24,65 @@ public class TlvParserTest
     @Test
     public void test() throws UbiveloxException, GaiaException
     {
-        assertEquals("3F01\t810A\t0102030405060708090A\n04\t03\t010101", TLVParser.parse("3F01810A0102030405060708090A0403010101"));
+        // assertEquals("3F01\t810A\t0102030405060708090A\n04\t03\t010101", TLVParser.parse("3F01810A0102030405060708090A0403010101"));
+        // assertEquals("01\t01\t03\n01\t00\n01\t01\t02", TLVParser.parse("0101030100010102"));
+        // assertEquals("01\t01\t03\n01\t01\t02\n01\t01\t02", TLVParser.parse("010103010102010102"));
+        // assertEquals("01\t00\n02\t00\n03\t00\n04\t03\t010101", TLVParser.parse("0100020003000403010101"));
+
+        assertEquals("21\t15\n\t21\t05\n\t\t21\t03\n\t\t\t01\t01\t01\n\t21\t05\n\t\t21\t03\n\t\t\t01\t01\t01\n\t21\t05\n\t\t21\t03\n\t\t\t01\t01\t01",
+                     TLVParser.parse("2115210521030101012105210301010121052103010101"));
+        assertEquals("21\t05\n\t21\t03\n\t\t01\t01\t01\n21\t05\n\t21\t03\n\t\t01\t01\t01\n21\t05\n\t21\t03\n\t\t01\t01\t01", TLVParser.parse("210521030101012105210301010121052103010101"));
+        assertEquals("21\t05\n\t21\t03\n\t\t01\t01\t01\n21\t05\n\t21\t03\n\t\t01\t01\t01", TLVParser.parse("2105210301010121052103010101"));
+        assertEquals("21\t05\n\t21\t03\n\t\t01\t01\t01", TLVParser.parse("21052103010101"));
+        assertEquals("21\t03\n\t01\t01\t01", TLVParser.parse("2103010101"));
+
+        assertEquals("1F01\t810A\t0102030405060708090A\n04\t03\t010101", TLVParser.parse("1F01810A0102030405060708090A0403010101"));
         assertEquals("01\t01\t03\n01\t00\n01\t01\t02", TLVParser.parse("0101030100010102"));
         assertEquals("01\t01\t03\n01\t01\t02\n01\t01\t02", TLVParser.parse("010103010102010102"));
         assertEquals("01\t00\n02\t00\n03\t00\n04\t03\t010101", TLVParser.parse("0100020003000403010101"));
         assertEquals("01\t00\n02\t00\n03\t00", TLVParser.parse("010002000300"));
         assertEquals("01\t00\n02\t00", TLVParser.parse("01000200"));
         assertEquals("01\t01\t01\n02\t01\t02", TLVParser.parse("010101020102"));
-        assertEquals("3F01\t810A\t0102030405060708090A", TLVParser.parse("3F01810A0102030405060708090A"));
-        assertEquals("3F01\t8109\t010203040506070809", TLVParser.parse("3F018109010203040506070809"));
-        assertEquals("3F01\t8108\t0102030405060708", TLVParser.parse("3F0181080102030405060708"));
-        assertEquals("3F01\t8107\t01020304050607", TLVParser.parse("3F01810701020304050607"));
-        assertEquals("3F01\t8106\t010203040506", TLVParser.parse("3F018106010203040506"));
+        assertEquals("1F01\t810A\t0102030405060708090A", TLVParser.parse("1F01810A0102030405060708090A"));
+        assertEquals("1F01\t8109\t010203040506070809", TLVParser.parse("1F018109010203040506070809"));
+        assertEquals("1F01\t8108\t0102030405060708", TLVParser.parse("1F0181080102030405060708"));
+        assertEquals("1F01\t8107\t01020304050607", TLVParser.parse("1F01810701020304050607"));
+        assertEquals("1F01\t8106\t010203040506", TLVParser.parse("1F018106010203040506"));
         // assertEquals("3F01\t8103\t010203", TLVParser.parse("3F0181030102030405"));
-        assertEquals("3F01\t8104\t01020304", TLVParser.parse("3F01810401020304"));
-        assertEquals("3F01\t8103\t010203", TLVParser.parse("3F018103010203"));
-        assertEquals("3F01\t8102\t0102", TLVParser.parse("3F0181020102"));
-        assertEquals("FF05\t8101\t11", TLVParser.parse("FF05810111"));
-        assertEquals("DF05\t8101\t11", TLVParser.parse("DF05810111"));
-        assertEquals("BF05\t8101\t11", TLVParser.parse("BF05810111"));
-        assertEquals("9F05\t8101\t11", TLVParser.parse("9F05810111"));
-        assertEquals("7F05\t8101\t11", TLVParser.parse("7F05810111"));
-        assertEquals("5F05\t8101\t11", TLVParser.parse("5F05810111"));
-        assertEquals("3F05\t8101\t11", TLVParser.parse("3F05810111"));
+        assertEquals("1F01\t8104\t01020304", TLVParser.parse("1F01810401020304"));
+        assertEquals("1F01\t8103\t010203", TLVParser.parse("1F018103010203"));
+        assertEquals("1F01\t8102\t0102", TLVParser.parse("1F0181020102"));
         assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
-        assertEquals("3F01\t8101\t01", TLVParser.parse("3F01810101"));
+        assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
+        assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
+        assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
+        assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
+        assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
+        assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
+        assertEquals("1F05\t8101\t11", TLVParser.parse("1F05810111"));
         assertEquals("1F01\t8101\t01", TLVParser.parse("1F01810101"));
-        assertEquals("FF03\t03\t111111", TLVParser.parse("FF0303111111"));
-        assertEquals("DF03\t03\t111111", TLVParser.parse("DF0303111111"));
-        assertEquals("BF03\t03\t111111", TLVParser.parse("BF0303111111"));
-        assertEquals("9F03\t03\t111111", TLVParser.parse("9F0303111111"));
-        assertEquals("7F03\t03\t111111", TLVParser.parse("7F0303111111"));
-        assertEquals("5F03\t03\t111111", TLVParser.parse("5F0303111111"));
-        assertEquals("EF\t01\t11", TLVParser.parse("EF0111"));
-        assertEquals("CF\t01\t11", TLVParser.parse("CF0111"));
-        assertEquals("AF\t01\t11", TLVParser.parse("AF0111"));
+        assertEquals("1F01\t8101\t01", TLVParser.parse("1F01810101"));
+        assertEquals("1F03\t03\t111111", TLVParser.parse("1F0303111111"));
+        assertEquals("1F03\t03\t111111", TLVParser.parse("1F0303111111"));
+        assertEquals("1F03\t03\t111111", TLVParser.parse("1F0303111111"));
+        assertEquals("1F03\t03\t111111", TLVParser.parse("1F0303111111"));
+        assertEquals("1F03\t03\t111111", TLVParser.parse("1F0303111111"));
+        assertEquals("1F03\t03\t111111", TLVParser.parse("1F0303111111"));
+        assertEquals("1f01\t01\t11", TLVParser.parse("1f010111"));
+        assertEquals("1f01\t01\t11", TLVParser.parse("1f010111"));
+        assertEquals("1f01\t01\t11", TLVParser.parse("1f010111"));
         assertEquals("01\t01\t11", TLVParser.parse("010111"));
-        assertEquals("EF\t8101\t01", TLVParser.parse("EF810101"));
-        assertEquals("CF\t8101\t01", TLVParser.parse("CF810101"));
-        assertEquals("AF\t8101\t01", TLVParser.parse("AF810101"));
+        assertEquals("1f01\t8101\t01", TLVParser.parse("1f01810101"));
+        assertEquals("1f01\t8101\t01", TLVParser.parse("1f01810101"));
+        assertEquals("1f01\t8101\t01", TLVParser.parse("1f01810101"));
         assertEquals("01\t8101\t01", TLVParser.parse("01810101"));
         assertEquals("01\t02\t0101", TLVParser.parse("01020101"));
         assertEquals("01\t01\t01", TLVParser.parse("010101"));
-        assertEquals("3F01\t01\t02", TLVParser.parse("3F010102"));
+        assertEquals("1F01\t01\t02", TLVParser.parse("1F010102"));
         assertEquals("1F70\t01\t02", TLVParser.parse("1F700102"));
         assertEquals("1F00\t01\t02", TLVParser.parse("1F000102"));
         assertEquals("1F01\t01\t02", TLVParser.parse("1F010102"));
-        assertEquals("ff01\t01\tff", TLVParser.parse("ff0101ff"));
+        assertEquals("1f01\t01\tff", TLVParser.parse("1f0101ff"));
         assertEquals("05\t01\tff", TLVParser.parse("0501ff"));
         assertEquals("03\t01\t02", TLVParser.parse("030102"));
         assertEquals("03\t01\t01", TLVParser.parse("030101"));
@@ -78,12 +90,12 @@ public class TlvParserTest
         assertEquals("03\t01\t01", TLVParser.parse("030101"));
         assertEquals("02\t01\t01", TLVParser.parse("020101"));
         assertEquals("01\t01\t01", TLVParser.parse("010101"));
-        assertEquals("FF01\t00", TLVParser.parse("FF0100"));
-        assertEquals("DF01\t00", TLVParser.parse("DF0100"));
-        assertEquals("BF01\t00", TLVParser.parse("BF0100"));
-        assertEquals("7F01\t00", TLVParser.parse("7F0100"));
-        assertEquals("5F01\t00", TLVParser.parse("5F0100"));
-        assertEquals("3F01\t00", TLVParser.parse("3F0100"));
+        assertEquals("1F01\t00", TLVParser.parse("1F0100"));
+        assertEquals("1F01\t00", TLVParser.parse("1F0100"));
+        assertEquals("1F01\t00", TLVParser.parse("1F0100"));
+        assertEquals("1F01\t00", TLVParser.parse("1F0100"));
+        assertEquals("1F01\t00", TLVParser.parse("1F0100"));
+        assertEquals("1F01\t00", TLVParser.parse("1F0100"));
         assertEquals("1F01\t00", TLVParser.parse("1F0100"));
         assertEquals("EF\t00", TLVParser.parse("EF00"));
         assertEquals("CF\t00", TLVParser.parse("CF00"));
@@ -106,6 +118,8 @@ public class TlvParserTest
         /*
          * parse
          */
+
+        parseException("", "3F01810A0102030405060708090A04030101013F01810201", "Value Range is not enough");
 
         parseException("", "3F01810201", "Value Range is not enough");
         parseException("", "2F0201", "Value Range is not enough");
