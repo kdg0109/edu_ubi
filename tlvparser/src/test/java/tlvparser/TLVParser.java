@@ -50,7 +50,7 @@ public class TLVParser
 
 
 
-    private static String parse(final String hexStringOrg, final int depth) throws UbiveloxException, GaiaException
+    private static String parse(final String hexStringOrg, final int depthOrg) throws UbiveloxException, GaiaException
     {
         GaiaUtils.checkHexaString(hexStringOrg);
 
@@ -64,18 +64,16 @@ public class TLVParser
         do
         {
             {
-
-                int depthLevel = depth;
+                int depth = depthOrg;
                 ValueType valueType = ValueType.PRIMITIVE;
+                int byteArrayPosition = tlvIndex;
+
                 String outPut = "";
                 String depthTab = "";
-
                 int tSize = 0;
                 int lSize = 0;
                 int vSize = 0;
-                int byteArrayPosition = tlvIndex;
 
-                // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
                 // primitive와 constructed 구분
                 if ( ((byteArray[byteArrayPosition]) & 0b0010_0000) == 0b0010_0000 )
                 {
@@ -92,15 +90,13 @@ public class TLVParser
                 if ( byteArray.length == byteArrayPosition )
                 {
                     throw new UbiveloxException("Length Range is not exist");
-
                 }
                 else
                 {
-
                     lSize = getLengthSize(byteArray, byteArrayPosition);
                     byteArrayPosition = ((tSize + lSize) / 2) - 1 + tlvIndex;
 
-                    for ( int i = 0; i < depthLevel; i++ )
+                    for ( int i = 0; i < depth; i++ )
                     {
                         depthTab += "\t";
                     }
@@ -122,7 +118,6 @@ public class TLVParser
                     }
 
                     vSize = byteArray[byteArrayPosition] * 2;
-                    // System.out.println("vSize : " + vSize);
 
                     if ( (tSize + lSize + vSize) > hexString.length() )
                     {
@@ -136,10 +131,9 @@ public class TLVParser
                     }
                     else
                     {
+                        depth++;
 
-                        depthLevel++;
-
-                        outPut += "\n" + parse(hexString.substring((tSize + lSize), (tSize + lSize + vSize)), depthLevel);
+                        outPut += "\n" + parse(hexString.substring((tSize + lSize), (tSize + lSize + vSize)), depth);
                     }
 
                     parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2));
@@ -164,7 +158,6 @@ public class TLVParser
 
     static int getTagSize(final byte[] byteArray, int byteArrPos) throws UbiveloxException, GaiaException
     {
-        // checkNLO(byteArray, byteArray == null ? 0 : byteArray.length, "Tag Byte Array");
         GaiaUtils.checkNullOrEmpty(byteArray);
 
         int tSize = 2;
@@ -192,7 +185,6 @@ public class TLVParser
 
     static int getLengthSize(final byte[] byteArray, final int byteArrPos) throws UbiveloxException, GaiaException
     {
-        // checkNLO(byteArr, byteArr == null ? 0 : byteArr.length, "Length Byte Array");
         GaiaUtils.checkNullOrEmpty(byteArray);
 
         int lSize = 2;
@@ -229,8 +221,6 @@ public class TLVParser
         int lSize = 0;
         int vSize = 0;
         int byteArrayPosition = 0;
-
-        // checkNLO(hexString, hexString == null ? 0 : hexString.length(), "HexaString");
 
         byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
 
