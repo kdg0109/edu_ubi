@@ -119,7 +119,7 @@ public class TLVParser
                      * if(valueType == ValueType.CONSTRUCTED){
                      *
                      * } else {
-                     * 
+                     *
                      * }
                      *
                      */
