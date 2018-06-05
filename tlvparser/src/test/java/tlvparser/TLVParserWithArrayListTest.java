@@ -1,6 +1,7 @@
 package tlvparser;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -271,7 +272,8 @@ public class TLVParserWithArrayListTest
         //@formatter:on
 
         assertEquals(List,
-                     TLVParserWithArrayList.parse("6F6F8408A000000003000000A5599F6501FF9F6E06479173512E00734A06072A864886FC6B01600C060A2A864886FC6B02020101630906072A864886FC6B03640B06092A864886FC6B040215650B06092B8510864864020103660C060A2B060104012A026E01028408A0000000030000006F6F8408A000000003000000A5599F6501FF9F6E06479173512E00734A06072A864886FC6B01600C060A2A864886FC6B02020101630906072A864886FC6B03640B06092A864886FC6B040215650B06092B8510864864020103660C060A2B060104012A026E01028408A000000003000000",
+                     TLVParserWithArrayList.parse("6F6F8408A000000003000000A5599F6501FF9F6E06479173512E00734A06072A864886FC6B01600C060A2A864886FC6B02020101630906072A864886FC6B03640B06092A864886FC6B040215650B06092B8510864864020103660C060A2B060104012A026E01028408A000000003000000"
+                                                  + "6F6F8408A000000003000000A5599F6501FF9F6E06479173512E00734A06072A864886FC6B01600C060A2A864886FC6B02020101630906072A864886FC6B03640B06092A864886FC6B040215650B06092B8510864864020103660C060A2B060104012A026E01028408A000000003000000",
                                                   0));
 
         tlvExpectedListDepth1.add(new TLVObject("01", "01", "01"));
@@ -329,5 +331,196 @@ public class TLVParserWithArrayListTest
         tlvExpectedList.add(new TLVObject("01", "01", "01"));
         assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("010101", 0));
 
+    }
+
+
+
+
+
+    @Test
+    public void testException() throws UbiveloxException, GaiaException
+    {
+
+        /*
+         * parse
+         */
+
+        parseException("", "3F01810A0102030405060708090A04030101013F01810201", "Value Range is not enough");
+
+        parseException("", "3F01810201", "Value Range is not enough");
+        parseException("", "2F0201", "Value Range is not enough");
+        parseException("", "010201", "Value Range is not enough");
+        parseException("", "010201", "Value Range is not enough");
+        parseException("", "1FFF010102", "Tag Range Overflow");
+        parseException("", "FFFF010102", "Tag Range Overflow");
+        parseException("", "FF80010102", "Tag Range Overflow");
+        parseException("", "DFFF010102", "Tag Range Overflow");
+        parseException("", "DFF0010102", "Tag Range Overflow");
+        parseException("", "BFFF010102", "Tag Range Overflow");
+        parseException("", "BFE0010102", "Tag Range Overflow");
+        parseException("", "9FFF010102", "Tag Range Overflow");
+        parseException("", "9FD0010102", "Tag Range Overflow");
+        parseException("", "7FFF010102", "Tag Range Overflow");
+        parseException("", "7FC0010102", "Tag Range Overflow");
+        parseException("", "5FFF010102", "Tag Range Overflow");
+        parseException("", "5FB0010102", "Tag Range Overflow");
+        parseException("", "3FFF010102", "Tag Range Overflow");
+        parseException("", "3FA1010102", "Tag Range Overflow");
+        parseException("", "1FFF010102", "Tag Range Overflow");
+        parseException("", "1F80010102", "Tag Range Overflow");
+        parseException("", "FF0181", "Length is not enough");
+        parseException("", "DF0181", "Length is not enough");
+        parseException("", "BF0181", "Length is not enough");
+        parseException("", "9F0181", "Length is not enough");
+        parseException("", "7F0181", "Length is not enough");
+        parseException("", "5F0181", "Length is not enough");
+        parseException("", "3F0181", "Length is not enough");
+        parseException("", "1F0181", "Length is not enough");
+        parseException("", "0181", "Length is not enough");
+        parseException("", "FF0182", "Length Range Overflow");
+        parseException("", "DF0184", "Length Range Overflow");
+        parseException("", "BF0183", "Length Range Overflow");
+        parseException("", "9F0182", "Length Range Overflow");
+        parseException("", "7F0184", "Length Range Overflow");
+        parseException("", "5F0183", "Length Range Overflow");
+        parseException("", "3F0182", "Length Range Overflow");
+        parseException("", "1F0182", "Length Range Overflow");
+        parseException("", "EF82", "Length Range Overflow");
+        parseException("", "CF82", "Length Range Overflow");
+        parseException("", "AF82", "Length Range Overflow");
+        parseException("", "8F82", "Length Range Overflow");
+        parseException("", "6F82", "Length Range Overflow");
+        parseException("", "4F82", "Length Range Overflow");
+        parseException("", "2F82", "Length Range Overflow");
+        parseException("", "0183", "Length Range Overflow");
+        parseException("", "0184", "Length Range Overflow");
+        parseException("", "3F0182010101", "Length Range Overflow");
+        parseException("", "1F0182010101", "Length Range Overflow");
+        parseException("", "0382010101", "Length Range Overflow");
+        parseException("", "0282010101", "Length Range Overflow");
+        parseException("", "0182010101", "Length Range Overflow");
+        parseException("", "ff01ff01", "Length Range Overflow");
+        parseException("", "EF", "Length Range is not exist");
+        parseException("", "CF", "Length Range is not exist");
+        parseException("", "AF", "Length Range is not exist");
+        parseException("", "0C", "Length Range is not exist");
+        parseException("", "0A", "Length Range is not exist");
+        parseException("", "06", "Length Range is not exist");
+        parseException("", "03", "Length Range is not exist");
+        parseException("", "02", "Length Range is not exist");
+        parseException("", "01", "Length Range is not exist");
+        parseException("", "FF03", "Length Range is not exist");
+        parseException("", "DF03", "Length Range is not exist");
+        parseException("", "BF03", "Length Range is not exist");
+        parseException("", "9F03", "Length Range is not exist");
+        parseException("", "7F03", "Length Range is not exist");
+        parseException("", "5F03", "Length Range is not exist");
+        parseException("", "3F05", "Length Range is not exist");
+        parseException("", "1F01", "Length Range is not exist");
+        parseException("", "FF028101", "Value Range is not exist");
+        parseException("", "DF028101", "Value Range is not exist");
+        parseException("", "BF028101", "Value Range is not exist");
+        parseException("", "9F028101", "Value Range is not exist");
+        parseException("", "7F028101", "Value Range is not exist");
+        parseException("", "5F028101", "Value Range is not exist");
+        parseException("", "3F028101", "Value Range is not exist");
+        parseException("", "1F028101", "Value Range is not exist");
+        parseException("", "FF0201", "Value Range is not exist");
+        parseException("", "DF0201", "Value Range is not exist");
+        parseException("", "BF0201", "Value Range is not exist");
+        parseException("", "9F0201", "Value Range is not exist");
+        parseException("", "7F0201", "Value Range is not exist");
+        parseException("", "5F0201", "Value Range is not exist");
+        parseException("", "3F0201", "Value Range is not exist");
+        parseException("", "1F0201", "Value Range is not exist");
+        parseException("", "1F0180", "Value Range is not exist");
+        parseException("", "1F0180", "Value Range is not exist");
+        parseException("", "1F0180", "Value Range is not exist");
+        parseException("", "1F0180", "Value Range is not exist");
+        parseException("", "1F0101", "Value Range is not exist");
+        parseException("", "1F0180", "Value Range is not exist");
+        parseException("", "0E01", "Value Range is not exist");
+        parseException("", "0D01", "Value Range is not exist");
+        parseException("", "0C01", "Value Range is not exist");
+        parseException("", "0B01", "Value Range is not exist");
+        parseException("", "0A01", "Value Range is not exist");
+        parseException("", "0180", "Value Range is not exist");
+        parseException("", "", "Target objects[0] is empty String.");
+
+        /*
+         * Tag
+         */
+        getTagSizeException(null, "Target objects[0] is null.");
+        getTagSizeException(new byte[0], "Target objects[0] is empty byte[].");
+
+        /*
+         * Length
+         */
+        getLengthSizeException(null, "Target objects[0] is null.");
+        getLengthSizeException(new byte[0], "Target objects[0] is empty byte[].");
+
+    }
+
+
+
+
+
+    private void getLengthSizeException(final byte[] byteArray, final String errorMessage)
+    {
+        try
+        {
+            TLVParserWithArrayList.getLengthSize(byteArray, 0);
+            fail();
+        }
+        catch ( UbiveloxException e )
+        {
+            assertEquals(errorMessage, e.getMessage());
+        }
+        catch ( GaiaException e )
+        {
+            assertEquals(errorMessage, e.getMessage());
+        }
+    }
+
+
+
+
+
+    private void getTagSizeException(final byte[] byteArray, final String errorMessage)
+    {
+        try
+        {
+            TLVParserWithArrayList.getTagSize(byteArray, 0);
+            fail();
+        }
+        catch ( UbiveloxException e )
+        {
+            assertEquals(errorMessage, e.getMessage());
+        }
+        catch ( GaiaException e )
+        {
+            assertEquals(errorMessage, e.getMessage());
+        }
+    }
+
+
+
+
+
+    private void parseException(final String outputString, final String hexStr, final String errorMessage)
+    {
+        try
+        {
+            assertEquals(outputString, TLVParserWithArrayList.parse(hexStr, 0));
+            fail();
+        }
+        catch ( UbiveloxException e )
+        {
+            assertEquals(errorMessage, e.getMessage());
+        }
+        catch ( GaiaException e )
+        {
+            assertEquals(errorMessage, e.getMessage());
+        }
     }
 }
