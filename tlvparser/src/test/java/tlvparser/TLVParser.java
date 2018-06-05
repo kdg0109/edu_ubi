@@ -43,14 +43,18 @@ public class TLVParser
 
     public static String parse(final String hexStringOrg) throws UbiveloxException, GaiaException
     {
-        return parse(hexStringOrg, 0);
+        byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexStringOrg);
+
+        return parse(hexStringOrg, byteArray, 0, 0, -1);
     }
 
 
 
 
 
-    private static String parse(final String hexStringOrg, final int depthOrg) throws UbiveloxException, GaiaException
+    // 스트링 자르는 위치도 바껴야하고 시작 위치 넘기는 것도 바껴야함
+    // 바이트 어레이를 넘기고, 시작 위치 offset을 넘겨야 한다.
+    private static String parse(final String hexStringOrg, final byte[] byteArray1, final int bytepos, final int depthOrg, final int subSize) throws UbiveloxException, GaiaException
     {
         GaiaUtils.checkHexaString(hexStringOrg);
 
@@ -58,8 +62,11 @@ public class TLVParser
         int hexStringIndex = 0;
         String hexString = hexStringOrg;
         TLVResultNBytePosition parseOne;
-        int tlvIndex = 0;
-        byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
+        int tlvOneSize = 0;
+        int tlvIndex = bytepos;
+        int valueSize = -1;
+        // 기존꺼는 스트링이 새롭게 계속 들어와서 이를 바이트로 변경함
+        byte[] byteArray = byteArray1;
 
         do
         {
@@ -67,9 +74,10 @@ public class TLVParser
                 int depth = depthOrg;
                 ValueType valueType = ValueType.PRIMITIVE;
                 int byteArrayPosition = tlvIndex;
-
                 String outPut = "";
                 String depthTab = "";
+
+                // 이건 딱 그 사이즈 크기
                 int tSize = 0;
                 int lSize = 0;
                 int vSize = 0;
@@ -85,7 +93,7 @@ public class TLVParser
                 }
 
                 tSize = getTagSize(byteArray, byteArrayPosition);
-                byteArrayPosition += tSize / 2;
+                byteArrayPosition = tSize / 2 + tlvIndex;
 
                 if ( byteArray.length == byteArrayPosition )
                 {
@@ -94,32 +102,47 @@ public class TLVParser
                 else
                 {
                     lSize = getLengthSize(byteArray, byteArrayPosition);
-                    byteArrayPosition = ((tSize + lSize) / 2) - 1 + tlvIndex;
+                    byteArrayPosition = ((tSize + lSize) / 2) + tlvIndex - 1;
 
                     for ( int i = 0; i < depth; i++ )
                     {
                         depthTab += "\t";
                     }
 
-                    outPut += depthTab + hexString.substring(0, tSize) + "\t" + hexString.substring(tSize, tSize + lSize);
+                    outPut += depthTab + hexString.substring(tlvIndex * 2, tSize + tlvIndex * 2) + "\t" + hexString.substring(tSize + tlvIndex * 2, tSize + lSize + tlvIndex * 2);
+
                 }
+
+                if ( depth != 0 )
+                {
+                    // 여기서 subSize는 앞 depth에서 뽑아낸 TLV의 V사이즈임
+                    tlvOneSize = subSize;
+                    valueSize = (byteArray[byteArrayPosition] & 0xff) * 2;
+                }
+                else
+                {
+                    tlvOneSize = hexString.length();
+                    valueSize = (byteArray[byteArrayPosition] & 0xff) * 2;
+                }
+
                 // length가 0이면 val없이 output
                 if ( byteArray[byteArrayPosition] == 0 )
                 {
                     parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition);
-                    tlvIndex += (tSize + lSize + vSize) / 2;
+                    tlvIndex = (tSize + lSize + vSize) / 2 + tlvIndex;
+
                 }
                 else
                 {
 
-                    if ( (tSize + lSize) == hexString.length() )
+                    if ( (tSize + lSize + tlvIndex * 2) == hexString.length() )
                     {
                         throw new UbiveloxException("Value Range is not exist");
                     }
 
                     vSize = byteArray[byteArrayPosition] * 2;
 
-                    if ( (tSize + lSize + vSize) > hexString.length() )
+                    if ( (tSize + lSize + vSize + tlvIndex * 2) > hexString.length() )
                     {
                         throw new UbiveloxException("Value Range is not enough");
                     }
@@ -127,27 +150,27 @@ public class TLVParser
                     // value의 타입
                     if ( valueType == ValueType.PRIMITIVE )
                     {
-                        outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
+                        outPut += "\t" + hexString.substring((tSize + lSize + tlvIndex * 2), (tSize + lSize + vSize + tlvIndex * 2));
+
                     }
                     else
                     {
                         depth++;
 
-                        outPut += "\n" + parse(hexString.substring((tSize + lSize), (tSize + lSize + vSize)), depth);
+                        outPut += "\n" + parse(hexString, byteArray1, tlvIndex + (tSize + lSize) / 2, depth, valueSize);
+
                     }
 
-                    parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2));
+                    parseOne = new TLVResultNBytePosition(outPut, byteArrayPosition + (vSize / 2 + tlvIndex));
                     tlvIndex += (tSize + lSize + vSize) / 2;
+
                 }
             }
-
             result += (hexStringIndex == 0 ? "" : "\n") + parseOne.tlvResult;
             hexStringIndex = parseOne.byteArrayPosition * 2 + 2;
 
-            hexString = hexStringOrg.substring(hexStringIndex);
-
         }
-        while ( !hexString.isEmpty() );
+        while ( tlvIndex != ((tlvOneSize / 2) + bytepos) );
 
         return result;
     }
@@ -156,6 +179,7 @@ public class TLVParser
 
 
 
+    // 옵셋에 맞는 포스가 들가야댐
     static int getTagSize(final byte[] byteArray, int byteArrPos) throws UbiveloxException, GaiaException
     {
         GaiaUtils.checkNullOrEmpty(byteArray);
@@ -183,6 +207,7 @@ public class TLVParser
 
 
 
+    // 옵셋에 맞는 포스가 들가야댐
     static int getLengthSize(final byte[] byteArray, final int byteArrPos) throws UbiveloxException, GaiaException
     {
         GaiaUtils.checkNullOrEmpty(byteArray);

@@ -223,7 +223,7 @@ public class TLVParserWithArrayListTest
         ArrayList<TLVObject> tlvExpectedListDepth1 = new ArrayList<>();
 
       //@formatter:off
-        ArrayList<TLVObject> List = new ArrayList<>(Arrays.asList(
+        ArrayList<TLVObject> tlvList = new ArrayList<>(Arrays.asList(
           new TLVObject("6F", "6F", new ArrayList<>(Arrays.asList(
                         new TLVObject("84", "08", "A000000003000000")
                       , new TLVObject("A5", "59", new ArrayList<>(Arrays.asList(
@@ -248,7 +248,7 @@ public class TLVParserWithArrayListTest
         ));
 
 
-        List.add(new TLVObject("6F", "6F", new ArrayList<>(Arrays.asList(
+        tlvList.add(new TLVObject("6F", "6F", new ArrayList<>(Arrays.asList(
                                new TLVObject("84", "08", "A000000003000000")
                              , new TLVObject("A5", "59", new ArrayList<>(Arrays.asList(
                                              new TLVObject("9F65", "01", "FF")
@@ -271,14 +271,13 @@ public class TLVParserWithArrayListTest
                        )));
         //@formatter:on
 
-        assertEquals(List,
+        assertEquals(tlvList,
                      TLVParserWithArrayList.parse("6F6F8408A000000003000000A5599F6501FF9F6E06479173512E00734A06072A864886FC6B01600C060A2A864886FC6B02020101630906072A864886FC6B03640B06092A864886FC6B040215650B06092B8510864864020103660C060A2B060104012A026E01028408A000000003000000"
-                                                  + "6F6F8408A000000003000000A5599F6501FF9F6E06479173512E00734A06072A864886FC6B01600C060A2A864886FC6B02020101630906072A864886FC6B03640B06092A864886FC6B040215650B06092B8510864864020103660C060A2B060104012A026E01028408A000000003000000",
-                                                  0));
+                                                  + "6F6F8408A000000003000000A5599F6501FF9F6E06479173512E00734A06072A864886FC6B01600C060A2A864886FC6B02020101630906072A864886FC6B03640B06092A864886FC6B040215650B06092B8510864864020103660C060A2B060104012A026E01028408A000000003000000"));
 
         tlvExpectedListDepth1.add(new TLVObject("01", "01", "01"));
         tlvExpectedList.add(new TLVObject("21", "03", tlvExpectedListDepth1));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("2103010101", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("2103010101"));
 
         tlvExpectedList.clear();
         tlvExpectedListDepth1.clear();
@@ -286,50 +285,50 @@ public class TLVParserWithArrayListTest
         tlvExpectedList.add(new TLVObject("01", "01", "03"));
         tlvExpectedList.add(new TLVObject("01", "01", "02"));
         tlvExpectedList.add(new TLVObject("01", "01", "02"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("010103010102010102", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("010103010102010102"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("01", "00"));
         tlvExpectedList.add(new TLVObject("02", "00"));
         tlvExpectedList.add(new TLVObject("03", "00"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("010002000300", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("010002000300"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("01", "00"));
         tlvExpectedList.add(new TLVObject("02", "00"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("01000200", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("01000200"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("1F01", "8104", "01020304"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1F01810401020304", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1F01810401020304"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("1F03", "03", "111111"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1F0303111111", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1F0303111111"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("1f01", "01", "ff"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1f0101ff", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1f0101ff"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("1F01", "00"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1F0100", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("1F0100"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("AF", "00"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("AF00", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("AF00"));
 
         tlvExpectedList.clear();
 
         tlvExpectedList.add(new TLVObject("01", "01", "01"));
-        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("010101", 0));
+        assertEquals(tlvExpectedList, TLVParserWithArrayList.parse("010101"));
 
     }
 
@@ -511,7 +510,7 @@ public class TLVParserWithArrayListTest
     {
         try
         {
-            assertEquals(outputString, TLVParserWithArrayList.parse(hexStr, 0));
+            assertEquals(outputString, TLVParserWithArrayList.parse(hexStr));
             fail();
         }
         catch ( UbiveloxException e )

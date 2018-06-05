@@ -44,7 +44,17 @@ public class TLVParserWithArrayList
 
 
 
-    public static ArrayList<TLVObject> parse(final String hexStringOrg, final int depthOrg) throws UbiveloxException, GaiaException
+    public static ArrayList<TLVObject> parse(final String hexStringOrg) throws UbiveloxException, GaiaException
+    {
+
+        return parse0(hexStringOrg);
+    }
+
+
+
+
+
+    public static ArrayList<TLVObject> parse0(final String hexStringOrg) throws UbiveloxException, GaiaException
     {
         GaiaUtils.checkHexaString(hexStringOrg);
 
@@ -58,12 +68,9 @@ public class TLVParserWithArrayList
         do
         {
             {
-                int depth = depthOrg;
                 ValueType valueType = ValueType.PRIMITIVE;
                 int byteArrayPosition = tlvIndex;
                 TLVObject tlvObject;
-                String outPut = "";
-                String depthTab = "";
                 int tSize = 0;
                 int lSize = 0;
                 int vSize = 0;
@@ -90,12 +97,6 @@ public class TLVParserWithArrayList
                     lSize = getLengthSize(byteArray, byteArrayPosition);
                     byteArrayPosition = ((tSize + lSize) / 2) - 1 + tlvIndex;
 
-                    for ( int i = 0; i < depth; i++ )
-                    {
-                        depthTab += "\t";
-                    }
-
-                    outPut += depthTab + hexString.substring(0, tSize) + "\t" + hexString.substring(tSize, tSize + lSize);
                 }
                 // length가 0이면 val없이 output
                 if ( byteArray[byteArrayPosition] == 0 )
@@ -122,18 +123,13 @@ public class TLVParserWithArrayList
                     // value의 타입
                     if ( valueType == ValueType.PRIMITIVE )
                     {
-                        outPut += "\t" + hexString.substring((tSize + lSize), (tSize + lSize + vSize));
                         tlvObject = new TLVObject(hexString.substring(0, tSize), hexString.substring(tSize, tSize + lSize), hexString.substring((tSize + lSize), (tSize + lSize + vSize)));
 
                     }
                     else
                     {
-                        depth++;
 
-                        outPut += "\n" + parse(hexString.substring((tSize + lSize), (tSize + lSize + vSize)), depth);
-
-                        tlvObject = new TLVObject(hexString.substring(0, tSize), hexString.substring(tSize, tSize + lSize),
-                                parse(hexString.substring((tSize + lSize), (tSize + lSize + vSize)), depth));
+                        tlvObject = new TLVObject(hexString.substring(0, tSize), hexString.substring(tSize, tSize + lSize), parse0(hexString.substring((tSize + lSize), (tSize + lSize + vSize))));
                     }
 
                     parseOne = new TLVResultNBytePosition(tlvObject, byteArrayPosition + (vSize / 2));
