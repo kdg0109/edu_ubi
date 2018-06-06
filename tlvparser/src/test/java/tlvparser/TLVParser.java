@@ -43,9 +43,12 @@ public class TLVParser
 
     public static String parse(final String hexStringOrg) throws UbiveloxException, GaiaException
     {
-        byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexStringOrg);
+    	String hexString = hexStringOrg;
+    	hexString = hexString.toUpperCase();
+    	
+        byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
 
-        return parse(hexStringOrg, byteArray, 0, 0, -1);
+        return parse(hexString, byteArray, 0, 0, -1);
     }
 
 
@@ -54,7 +57,7 @@ public class TLVParser
 
     // 스트링 자르는 위치도 바껴야하고 시작 위치 넘기는 것도 바껴야함
     // 바이트 어레이를 넘기고, 시작 위치 offset을 넘겨야 한다.
-    private static String parse(final String hexStringOrg, final byte[] byteArray1, final int bytepos, final int depthOrg, final int subSize) throws UbiveloxException, GaiaException
+    private static String parse(final String hexStringOrg, final byte[] byteArray, final int bytepos, final int depthOrg, final int constructedValueSizeOrg) throws UbiveloxException, GaiaException
     {
         GaiaUtils.checkHexaString(hexStringOrg);
 
@@ -62,18 +65,17 @@ public class TLVParser
         int hexStringIndex = 0;
         String hexString = hexStringOrg;
         TLVResultNBytePosition parseOne;
-        int tlvOneSize = 0;
-        int tlvIndex = bytepos;
-        int valueSize = -1;
-        // 기존꺼는 스트링이 새롭게 계속 들어와서 이를 바이트로 변경함
-        byte[] byteArray = byteArray1;
-
+        int tlvOneSize = hexString.length();
+        int tlvIndex = bytepos;		//byteArrayPosition은 현재 해당하는 tlv를 하나씩 옮겨다니는 포지션
+        int constructedValueSize = -1;
+        
         do
         {
             {
+            	//현재 해당하는 tlv의 String 길이를 구할 때 사용
                 int depth = depthOrg;
                 ValueType valueType = ValueType.PRIMITIVE;
-                int byteArrayPosition = tlvIndex;
+                int byteArrayPosition = tlvIndex;		//byteArrayPosition은 현재 해당하는 tlv를 하나씩 옮겨다니는 포지션
                 String outPut = "";
                 String depthTab = "";
 
@@ -102,7 +104,7 @@ public class TLVParser
                 else
                 {
                     lSize = getLengthSize(byteArray, byteArrayPosition);
-                    byteArrayPosition = ((tSize + lSize) / 2) + tlvIndex - 1;
+                    byteArrayPosition = ((tSize + lSize) / 2) + tlvIndex - 1;	// -1을 해줌으로써 length의 마지막 바이트를 다시 가르킴
 
                     for ( int i = 0; i < depth; i++ )
                     {
@@ -116,14 +118,12 @@ public class TLVParser
                 if ( depth != 0 )
                 {
                     // 여기서 subSize는 앞 depth에서 뽑아낸 TLV의 V사이즈임
-                    tlvOneSize = subSize;
-                    valueSize = (byteArray[byteArrayPosition] & 0xff) * 2;
+                    tlvOneSize = constructedValueSizeOrg;
                 }
-                else
-                {
-                    tlvOneSize = hexString.length();
-                    valueSize = (byteArray[byteArrayPosition] & 0xff) * 2;
-                }
+                
+                //Constructed Value의 사이즈
+                constructedValueSize = (byteArray[byteArrayPosition] & 0xff) * 2;
+                
 
                 // length가 0이면 val없이 output
                 if ( byteArray[byteArrayPosition] == 0 )
@@ -157,7 +157,7 @@ public class TLVParser
                     {
                         depth++;
 
-                        outPut += "\n" + parse(hexString, byteArray1, tlvIndex + (tSize + lSize) / 2, depth, valueSize);
+                        outPut += "\n" + parse(hexString, byteArray, tlvIndex + (tSize + lSize) / 2, depth, constructedValueSize);
 
                     }
 
@@ -166,6 +166,8 @@ public class TLVParser
 
                 }
             }
+            
+            //hexStringIndex를 통해 같은 depth에 있는 스트링을 \n으로 구분
             result += (hexStringIndex == 0 ? "" : "\n") + parseOne.tlvResult;
             hexStringIndex = parseOne.byteArrayPosition * 2 + 2;
 
