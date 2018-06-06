@@ -117,7 +117,7 @@ public class TLVParser
 
                 if ( depth != 0 )
                 {
-                    // 여기서 subSize는 앞 depth에서 뽑아낸 TLV의 V사이즈임
+                    // 여기서 constructedValueSizeOrg는 앞 depth에서 뽑아낸 TLV의 V사이즈임
                     tlvOneSize = constructedValueSizeOrg;
                 }
                 
