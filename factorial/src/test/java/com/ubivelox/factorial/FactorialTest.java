@@ -12,7 +12,7 @@ public class FactorialTest {
 	@Test
 	public void testGetZeroCount() throws UbiveloxException {
 
-//		assertEquals(249999998, Factorial.getZeroCount(2147483645));
+		assertEquals(249999998, Factorial.getZeroCount(2147483645));
 		
 		assertEquals(499999997, Factorial.getZeroCount(2000000000));
 		assertEquals(499999988, Factorial.getZeroCount(1999999999));

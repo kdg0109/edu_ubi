@@ -11,10 +11,11 @@ public class Factorial {
 		return getZeroCount0(numOrg);
 	}
 
-	//5를 몇 개 곱하느냐에 따라 0의 갯수도 늘어남. 따라서 5배수만 for문에서는 값을 5로 계속 쪼갰을 때의 5 갯수를 count
+	//5를 몇 개 곱하느냐에 따라 0의 갯수도 늘어남. 따라서 5배수만 활용.
+	//for문에서는 값을 5로 계속 쪼갰을 때의 5 갯수를 count
 	public static int getZeroCount0(int numOrg) throws UbiveloxException{
 		int count = 0;
-		int num = numOrg;
+		int num;
 		
 		if(numOrg < 0) {
 			throw new UbiveloxException("에러 : 음수");
@@ -23,7 +24,7 @@ public class Factorial {
 		//i가 5의 배수일 때만 검색
 		for(int i = 5; i <= numOrg; i+=5) {
 			num = i;
-			
+		 	
 			//5의 배수 i를  5로 계속 쪼갰을 때의 5 갯수를 count한다.
 			do {
 				count += 1;
@@ -35,6 +36,7 @@ public class Factorial {
 	}
 	  
 	//곱하고 10으로 나눴을 때 나머지가 0이라면 곱한 결과 값이 10배수니까 count올리고 /10을 하여 다시 0이 없는 값으로 변경시킨다.
+	//만약 result가 190라면 count++해주고 19로 만들어줌
 	public static int getZeroCount1(int numOrg) throws UbiveloxException{
 		int count = 0;
 		double result = 1;
@@ -56,13 +58,12 @@ public class Factorial {
 
 	//BigInteger를 이용하여 getZeroCount1를 보완
 	public static int getZeroCount2(int numOrg) throws UbiveloxException{
-		
+		int count = 0;
 		BigInteger result = BigInteger.valueOf(1);	
 		BigInteger ten = BigInteger.valueOf(10);
 		BigInteger zero = BigInteger.valueOf(0);
 
 	
-		int count = 0;
 
 		if(numOrg < 0) {
 			throw new UbiveloxException("에러 : 음수");
