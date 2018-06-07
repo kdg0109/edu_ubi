@@ -10,7 +10,6 @@ import com.ubivelox.gaia.util.GaiaUtils;
 
 import exception.UbiveloxException;
 import lombok.Data;
-import tlvparser.TLVParserWithArrayListTest.TLVObject;
 
 @Data
 public class TLVParserWithArrayList
@@ -63,11 +62,11 @@ public class TLVParserWithArrayList
 
     		
     		//constructed가 존재한다는 뜻
-    		if(tlvObject.getValue() != null){
-    			result += "\n" + getTLVStrig(tlvObject.getValue(), depth+1);
-    		}else{
+    		if(tlvObject.getValue() == null){
     			stringValue = tlvObject.getStringValue();
     			result += (length.substring(length.length()-2, length.length()).equals("00") ? stringValue : "\t" + stringValue);
+    		}else{
+    			result += "\n" + getTLVStrig(tlvObject.getValue(), depth+1);
     		}
     		    		
     		result += (i+1 == tlvList.size() ? "" : "\n");
@@ -101,7 +100,7 @@ public class TLVParserWithArrayList
     	
     	byte[] byteArray = GaiaUtils.convertHexaStringToByteArray(hexString);
 
-    	ArrayList<TLVObject> tlvList = parse1(hexString, byteArray, 0, 0, -1);
+    	ArrayList<TLVObject> tlvList = parse1(hexString, byteArray, 0, -1);
 
     	return getTLVStrig(tlvList, 0);
     }
@@ -109,7 +108,7 @@ public class TLVParserWithArrayList
    
 
 	//byteArray와 String의 offset를 이용
-    public static ArrayList<TLVObject> parse1(final String hexStringOrg, final byte[] byteArray, final int bytepos, final int depthOrg, final int constructedValueSizeOrg) throws UbiveloxException, GaiaException
+    public static ArrayList<TLVObject> parse1(final String hexStringOrg, final byte[] byteArray, final int bytepos, final int constructedValueSizeOrg) throws UbiveloxException, GaiaException
     {
 
         ArrayList<TLVObject> result = new ArrayList<>();
@@ -122,8 +121,6 @@ public class TLVParserWithArrayList
         do
         {
             {
-            	//현재 해당하는 tlv의 String 길이를 구할 때 사용
-                int depth = depthOrg;
                 ValueType valueType = ValueType.PRIMITIVE;
                 int byteArrayPosition = tlvIndex;		//byteArrayPosition은 현재 해당하는 tlv를 하나씩 옮겨다니는 포지션
                 TLVObject tlvObject;
@@ -152,10 +149,10 @@ public class TLVParserWithArrayList
                 {
                     lSize = getLengthSize(byteArray, byteArrayPosition);
                     byteArrayPosition = ((tSize + lSize) / 2) + tlvIndex - 1;
-
                 }
                 
-                if ( depth != 0 )
+              //현재 해당하는 tlv의 String 길이를 구할 때 사용
+                if ( bytepos != 0 )
                 {
                     // 여기서 constructedValueSizeOrg는 앞 depth에서 뽑아낸 TLV의 V사이즈임
                     tlvOneSize = constructedValueSizeOrg;
@@ -195,9 +192,7 @@ public class TLVParserWithArrayList
                     }
                     else
                     {
-                    	depth++;
-                    	
-                        tlvObject = new TLVObject(hexString.substring(tlvIndex * 2, tSize + tlvIndex * 2), hexString.substring(tSize + tlvIndex * 2, tSize + lSize + tlvIndex * 2), parse1(hexString, byteArray, tlvIndex + (tSize + lSize) / 2, depth, constructedValueSize));
+                        tlvObject = new TLVObject(hexString.substring(tlvIndex * 2, tSize + tlvIndex * 2), hexString.substring(tSize + tlvIndex * 2, tSize + lSize + tlvIndex * 2), parse1(hexString, byteArray, tlvIndex + (tSize + lSize) / 2, constructedValueSize));
                     }
 
                     parseOne = new TLVResultNBytePosition(tlvObject, byteArrayPosition + (vSize / 2 + tlvIndex));
