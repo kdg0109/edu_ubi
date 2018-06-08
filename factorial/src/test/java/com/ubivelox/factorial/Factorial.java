@@ -7,7 +7,7 @@ import com.ubivelox.exception.UbiveloxException;
 public class Factorial
 {
 
-    public static int getZeroCount(final int numOrg) throws UbiveloxException
+    public static long getZeroCount(final long numOrg) throws UbiveloxException
     {
 
         return getZeroCount0(numOrg);
@@ -19,10 +19,10 @@ public class Factorial
 
     // 5를 몇 개 곱하느냐에 따라 0의 갯수도 늘어남. 따라서 5배수만 활용.
     // for문에서는 값을 5로 계속 쪼갰을 때의 5 갯수를 count
-    public static int getZeroCount0(final int numOrg) throws UbiveloxException
+    public static long getZeroCount0(final long numOrg) throws UbiveloxException
     {
-        int count = 0;
-        int num;
+        long count = 0;
+        long num;
 
         if ( numOrg < 0 )
         {
@@ -30,7 +30,7 @@ public class Factorial
         }
 
         // i가 5의 배수일 때만 검색
-        for ( int i = 5; i <= numOrg; i += 5 )
+        for ( long i = 5; i <= numOrg && i > 0; i += 5 )
         {
             num = i;
 
@@ -41,7 +41,97 @@ public class Factorial
                 num /= 5;
             }
             while ( num % 5 == 0 );
+
         }
+
+        return count;
+    }
+
+
+
+
+
+    public static long getZeroCount3(final long numOrg) throws UbiveloxException
+    {
+        long count = 0;
+        long num = numOrg;
+
+        if ( numOrg < 0 )
+        {
+            throw new UbiveloxException("에러 : 음수");
+        }
+
+        do
+        {
+            count += num / 5;
+            num /= 5;
+        }
+        while ( num != 0 );
+
+        return count;
+    }
+
+
+
+
+
+    // 1. jinsu의 최소공약수를 구함. 2,3,5,7,11,13 이런거 생기겠지 제곱도 생기고 22 31
+    // 2. num을 구해진 jinsu의 최소공약수 나누고 그때나온 몫들을 제곱으로 나눠. 그렇게 나온 수들이 최소공약수 갯수대로 나와
+    // 3. 2번에서 구한 값들의 최소 값이 0의 갯수임
+
+    static long getZeroCount5(final long numOrg, final long jinsu) throws UbiveloxException
+    {
+        long num = numOrg;
+        long factor1 = 2;
+
+        while ( num )
+        {
+            return 0;
+        }
+    }
+
+
+
+
+
+    static long getZeroCount4(final long numOrg, final long jinsu) throws UbiveloxException
+    {
+        long factor1 = 2;
+        long factor2 = 2;
+
+        if ( numOrg < 0 )
+        {
+            throw new UbiveloxException("에러 : 음수");
+        }
+        else if ( jinsu == 0 )
+        {
+            throw new UbiveloxException("에러 : 옳지 않은 진수");
+        }
+        else if ( jinsu == 1 )
+        {
+            return 0;
+        }
+
+        // 진수의 최소 공약수 하나랑 그에 먹는 약수
+        while ( jinsu % factor1 != 0 )
+        {
+            factor1++;
+        }
+
+        factor2 = (jinsu / factor1 < factor1 ? factor1 : jinsu / factor1);
+
+        System.out.println(factor1 + "/" + factor2);
+
+        long num = numOrg;
+        long count = 0;
+
+        do
+        {
+            count += num / factor2;
+            num /= factor2;
+
+        }
+        while ( num != 0 );
 
         return count;
     }
