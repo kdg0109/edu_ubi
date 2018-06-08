@@ -14,11 +14,48 @@ public class FactorialTest
     public void testGetZeroCount() throws UbiveloxException
     {
 
+        // assertEquals(1, Factorial.getZeroCount(20, 19));
+        // assertEquals(4, Factorial.getZeroCount(20, 18));
+        // assertEquals(1, Factorial.getZeroCount(20, 17));
+        // assertEquals(4, Factorial.getZeroCount(20, 16));
+        // assertEquals(4, Factorial.getZeroCount(20, 15));
+        // assertEquals(2, Factorial.getZeroCount(20, 14));
+        // assertEquals(1, Factorial.getZeroCount(20, 13));
+        // assertEquals(8, Factorial.getZeroCount(20, 12));
+        // assertEquals(1, Factorial.getZeroCount(20, 11));
+        // assertEquals(4, Factorial.getZeroCount(20, 10));
+        // assertEquals(4, Factorial.getZeroCount(20, 9));
+        // assertEquals(6, Factorial.getZeroCount(20, 8));
+        // assertEquals(2, Factorial.getZeroCount(20, 7));
+        // assertEquals(8, Factorial.getZeroCount(20, 6));
+        // assertEquals(4, Factorial.getZeroCount(20, 5));
+        // assertEquals(9, Factorial.getZeroCount(20, 4));
+        // assertEquals(8, Factorial.getZeroCount(20, 3));
+        // assertEquals(18, Factorial.getZeroCount(20, 2));
+        assertEquals(1, Factorial.getZeroCount(15, 1));
+        assertEquals(1, Factorial.getZeroCount(15, 9));
+        assertEquals(0, Factorial.getZeroCount(15, 8));
+        assertEquals(2, Factorial.getZeroCount(15, 7));
+        assertEquals(6, Factorial.getZeroCount(15, 6));
+        assertEquals(6, Factorial.getZeroCount(15, 3));
+        assertEquals(2, Factorial.getZeroCount(10, 18));
+        assertEquals(1, Factorial.getZeroCount(10, 16));
+        assertEquals(3, Factorial.getZeroCount(10, 12));
+        assertEquals(2, Factorial.getZeroCount(10, 10));
+        assertEquals(2, Factorial.getZeroCount(10, 9));
+        assertEquals(0, Factorial.getZeroCount(10, 8));
+        assertEquals(1, Factorial.getZeroCount(10, 7));
+        assertEquals(4, Factorial.getZeroCount(10, 6));
+        assertEquals(2, Factorial.getZeroCount(10, 5));
+        assertEquals(3, Factorial.getZeroCount(10, 4));
+        assertEquals(4, Factorial.getZeroCount(10, 3));
+
+        // System.out.println(Factorial.getCount(999999999, factoList));
         // assertEquals(249999998, Factorial.getZeroCount(2147483645));
 
-        // assertEquals(499999997, Factorial.getZeroCount3(Long.MAX_VALUE)); DD
+        // assertEquals(499999997, Factorial.getZeroCount(Long.MAX_VALUE, 10));
 
-        // System.out.println(Factorial.getZeroCount3(Integer.MAX_VALUE));
+        System.out.println(Factorial.getZeroCount(Integer.MAX_VALUE, 10));
         //
         //
         // assertEquals(499999988, Factorial.getZeroCount(1999999999));
@@ -121,61 +158,44 @@ public class FactorialTest
         // assertEquals(7, Factorial.getZeroCount(32));
         // assertEquals(7, Factorial.getZeroCount(31));
         //
-        // assertEquals(7, Factorial.getZeroCount(30));
-        // assertEquals(6, Factorial.getZeroCount(29));
-        // assertEquals(6, Factorial.getZeroCount(28));
-        // assertEquals(6, Factorial.getZeroCount(27));
-        // assertEquals(6, Factorial.getZeroCount(26));
-        //
-        // assertEquals(6, Factorial.getZeroCount(25));
-        // assertEquals(4, Factorial.getZeroCount(24));
-        // assertEquals(4, Factorial.getZeroCount(23));
-        // assertEquals(4, Factorial.getZeroCount(22));
-        // assertEquals(4, Factorial.getZeroCount(21));
-        //
-        // assertEquals(4, Factorial.getZeroCount(20));
-        // assertEquals(3, Factorial.getZeroCount(19));
-        // assertEquals(3, Factorial.getZeroCount(18));
-        // assertEquals(3, Factorial.getZeroCount(17));
-        // assertEquals(3, Factorial.getZeroCount(16));
-        //
-        // assertEquals(3, Factorial.getZeroCount(15));
-        // assertEquals(2, Factorial.getZeroCount(14));
-        // assertEquals(2, Factorial.getZeroCount(13));
-        // assertEquals(2, Factorial.getZeroCount(12));
-        // assertEquals(2, Factorial.getZeroCount(11));
-        //
-        // assertEquals(2, Factorial.getZeroCount(10));
-        // assertEquals(1, Factorial.getZeroCount(9));
-        // assertEquals(1, Factorial.getZeroCount(8));
-        // assertEquals(1, Factorial.getZeroCount(7));
-        // assertEquals(1, Factorial.getZeroCount(6));
-        //
-        // assertEquals(1, Factorial.getZeroCount(5));
-        // assertEquals(0, Factorial.getZeroCount(4));
-        // assertEquals(0, Factorial.getZeroCount(3));
-        // assertEquals(0, Factorial.getZeroCount(2));
-        // assertEquals(0, Factorial.getZeroCount(1));
-        // assertEquals(0, Factorial.getZeroCount(0));
 
-        // // assertEquals(4, Factorial.getZeroCount5(1048576, 32));
-        // assertEquals(3, Factorial.getZeroCount5(32768, 32));
-        // assertEquals(2, Factorial.getZeroCount5(1024, 32));
-        // assertEquals(2, Factorial.getZeroCount5(832, 8));
-        // assertEquals(1, Factorial.getZeroCount5(104, 8));
-        // assertEquals(3, Factorial.getZeroCount5(700416, 16));
-        // assertEquals(2, Factorial.getZeroCount5(4608, 16));
-        // assertEquals(2, Factorial.getZeroCount5(300, 2));
-        // assertEquals(2, Factorial.getZeroCount5(100, 2));
+        assertEquals(7, Factorial.getZeroCount(30, 10));
+        assertEquals(6, Factorial.getZeroCount(29, 10));
+        assertEquals(6, Factorial.getZeroCount(28, 10));
+        assertEquals(6, Factorial.getZeroCount(27, 10));
+        assertEquals(6, Factorial.getZeroCount(26, 10));
 
-        // assertEquals(2, Factorial.getZeroCount4(15, 16));
-        assertEquals(3, Factorial.getZeroCount4(15, 8));
-        assertEquals(18, Factorial.getZeroCount4(20, 2));
-        assertEquals(11, Factorial.getZeroCount4(15, 2));
-        assertEquals(9, Factorial.getZeroCount4(40, 10));
-        assertEquals(2, Factorial.getZeroCount4(10, 10));
-        assertEquals(1, Factorial.getZeroCount4(5, 10));
-        assertEquals(0, Factorial.getZeroCount4(0, 10));
+        assertEquals(6, Factorial.getZeroCount(25, 10));
+        assertEquals(4, Factorial.getZeroCount(24, 10));
+        assertEquals(4, Factorial.getZeroCount(23, 10));
+        assertEquals(4, Factorial.getZeroCount(22, 10));
+        assertEquals(4, Factorial.getZeroCount(21, 10));
+
+        assertEquals(4, Factorial.getZeroCount(20, 10));
+        assertEquals(3, Factorial.getZeroCount(19, 10));
+        assertEquals(3, Factorial.getZeroCount(18, 10));
+        assertEquals(3, Factorial.getZeroCount(17, 10));
+        assertEquals(3, Factorial.getZeroCount(16, 10));
+
+        assertEquals(3, Factorial.getZeroCount(15, 10));
+        assertEquals(2, Factorial.getZeroCount(14, 10));
+        assertEquals(2, Factorial.getZeroCount(13, 10));
+        assertEquals(2, Factorial.getZeroCount(12, 10));
+        assertEquals(2, Factorial.getZeroCount(11, 10));
+
+        assertEquals(2, Factorial.getZeroCount(10, 10));
+        assertEquals(1, Factorial.getZeroCount(9, 10));
+        assertEquals(1, Factorial.getZeroCount(8, 10));
+        assertEquals(1, Factorial.getZeroCount(7, 10));
+        assertEquals(1, Factorial.getZeroCount(6, 10));
+        //
+        assertEquals(1, Factorial.getZeroCount(5, 10));
+        assertEquals(0, Factorial.getZeroCount(4, 10));
+        assertEquals(0, Factorial.getZeroCount(3, 10));
+        assertEquals(0, Factorial.getZeroCount(2, 10));
+        assertEquals(0, Factorial.getZeroCount(1, 10));
+        assertEquals(0, Factorial.getZeroCount(0, 10));
+
     }
 
 
@@ -185,7 +205,9 @@ public class FactorialTest
     @Test
     public void testError()
     {
-        getException(30, 0, "에러 : 옳지 않은 진수");
+        getException(30, 0, "에러 : 값 1 또는 0 또는 음수");
+        getException(30, 0, "에러 : 값 1 또는 0 또는 음수");
+        getException(30, -1, "에러 : 값 1 또는 0 또는 음수");
         getException(-199, 10, "에러 : 음수");
         getException(-12, 10, "에러 : 음수");
         getException(-1, 10, "에러 : 음수");
@@ -199,7 +221,7 @@ public class FactorialTest
     {
         try
         {
-            Factorial.getZeroCount4(num, jinsu);
+            Factorial.getZeroCount(num, jinsu);
             fail();
         }
         catch ( UbiveloxException e )

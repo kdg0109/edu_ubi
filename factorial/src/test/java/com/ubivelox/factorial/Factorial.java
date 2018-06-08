@@ -1,16 +1,172 @@
 package com.ubivelox.factorial;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 import com.ubivelox.exception.UbiveloxException;
 
 public class Factorial
 {
 
-    public static long getZeroCount(final long numOrg) throws UbiveloxException
+    static class Factor
     {
+        long number;
+        long exponentiation;
 
-        return getZeroCount0(numOrg);
+
+
+
+
+        public Factor(final long number, final long exponentiation)
+        {
+            this.number = number;
+            this.exponentiation = exponentiation;
+        }
+
+
+
+
+
+        public long getNumber()
+        {
+            return this.number;
+        }
+
+
+
+
+
+        public void setNumber(final long number)
+        {
+            this.number = number;
+        }
+
+
+
+
+
+        public long getExponentiation()
+        {
+            return this.exponentiation;
+        }
+
+
+
+
+
+        public void setExponentiation(final long exponentiation)
+        {
+            this.exponentiation = exponentiation;
+        }
+
+    }
+
+
+
+
+
+    public static long getZeroCount(final long numOrg, final int jinsu) throws UbiveloxException
+    {
+        // return getCount(numOrg, parser5(numOrg, jinsu));
+        return getCount(numOrg, parser5(numOrg, jinsu));
+    }
+
+
+
+
+
+    private static ArrayList<Factor> parser5(final long numOrg, final int jinsu) throws UbiveloxException
+    {
+        ArrayList<Factor> list = new ArrayList<>();
+        int n = 2;
+        long number = jinsu;
+        long count = 0;
+
+        if ( jinsu == 1 || jinsu == 0 || jinsu < 0 )
+        {
+            throw new UbiveloxException("에러 : 값 1 또는 0 또는 음수");
+        }
+        do
+        {
+            if ( number % n == 0 )
+            {
+                while ( number % n == 0 )
+                {
+
+                    number /= n;
+                    count++;
+                }
+
+                System.out.println("n : " + n + " count : " + count);
+                list.add(new Factor(n, count));
+            }
+            n++;
+            count = 0;
+
+        }
+        while ( n != jinsu );
+
+        if ( list.isEmpty() )
+        {
+            list.add(new Factor(jinsu, 1));
+        }
+
+        return list;
+    }
+
+    // 1. jinsu의 최소공약수를 구함. 2,3,5,7,11,13 이런거 생기겠지 제곱도 생기고 22 31
+    // 2. num을 구해진 jinsu의 최소공약수 나누고 그때나온 몫들을 제곱으로 나눠. 그렇게 나온 수들이 최소공약수 갯수대로 나와
+    // 3. 2번에서 구한 값들의 최소 값이 0의 갯수임
+
+
+
+
+
+    // num는 숫자임
+    static long getCount(final long numOrg, final ArrayList<Factor> factoList) throws UbiveloxException
+    {
+        long minZeroCount = Long.MAX_VALUE;
+
+        for ( int i = 0; i < factoList.size(); i++ )
+        {
+            long num = numOrg;
+            long minZeroCountTmp = 0;
+            long numResult = 0;
+            long expResult = 0;
+
+            if ( numOrg < 0 )
+            {
+                throw new UbiveloxException("에러 : 음수");
+            }
+            do
+            {
+                num /= factoList.get(i).number;
+                numResult += num;
+            }
+            while ( num != 1 && num != 0 );
+
+            expResult = numResult;
+
+            if ( factoList.get(i).exponentiation != 1 )
+            {
+                while ( numResult % factoList.get(i).exponentiation == 0 )
+                {
+                    minZeroCountTmp++;
+                    numResult /= factoList.get(i).exponentiation;
+                }
+                expResult = minZeroCountTmp;
+            }
+
+            minZeroCountTmp = expResult;
+
+            if ( minZeroCount > minZeroCountTmp )
+            {
+                minZeroCount = minZeroCountTmp;
+            }
+        }
+
+        return minZeroCount;
+
     }
 
 
@@ -69,25 +225,6 @@ public class Factorial
         while ( num != 0 );
 
         return count;
-    }
-
-
-
-
-
-    // 1. jinsu의 최소공약수를 구함. 2,3,5,7,11,13 이런거 생기겠지 제곱도 생기고 22 31
-    // 2. num을 구해진 jinsu의 최소공약수 나누고 그때나온 몫들을 제곱으로 나눠. 그렇게 나온 수들이 최소공약수 갯수대로 나와
-    // 3. 2번에서 구한 값들의 최소 값이 0의 갯수임
-
-    static long getZeroCount5(final long numOrg, final long jinsu) throws UbiveloxException
-    {
-        long num = numOrg;
-        long factor1 = 2;
-
-        while ( num )
-        {
-            return 0;
-        }
     }
 
 
