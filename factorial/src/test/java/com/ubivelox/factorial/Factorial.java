@@ -2,6 +2,7 @@ package com.ubivelox.factorial;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ubivelox.exception.UbiveloxException;
 
@@ -10,8 +11,8 @@ public class Factorial
 
     static class Factor
     {
-        long number;         // 최소 공약수
-        long exponentiation; // 거듭 제곱
+        private long number;         // 최소 공약수
+        private long exponentiation; // 거듭 제곱
 
 
 
@@ -27,8 +28,12 @@ public class Factorial
 
 
 
-        public long getNumber()
+        public long getNumber() throws UbiveloxException
         {
+            if ( this.number == 0 )
+            {
+                throw new UbiveloxException("에러 : number가 0 입니다.");
+            }
             return this.number;
         }
 
@@ -45,8 +50,12 @@ public class Factorial
 
 
 
-        public long getExponentiation()
+        public long getExponentiation() throws UbiveloxException
         {
+            if ( this.exponentiation == 0 )
+            {
+                throw new UbiveloxException("에러 : exponentiation가 0 입니다.");
+            }
             return this.exponentiation;
         }
 
@@ -59,36 +68,94 @@ public class Factorial
             this.exponentiation = exponentiation;
         }
 
+
+
+
+
+        @Override
+        public int hashCode()
+        {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + (int) (this.exponentiation ^ (this.exponentiation >>> 32));
+            result = prime * result + (int) (this.number ^ (this.number >>> 32));
+            return result;
+        }
+
+
+
+
+
+        @Override
+        public boolean equals(final Object obj)
+        {
+            if ( this == obj )
+            {
+                return true;
+            }
+            if ( obj == null )
+            {
+                return false;
+            }
+            if ( getClass() != obj.getClass() )
+            {
+                return false;
+            }
+            Factor other = (Factor) obj;
+            if ( this.exponentiation != other.exponentiation )
+            {
+                return false;
+            }
+            if ( this.number != other.number )
+            {
+                return false;
+            }
+            return true;
+        }
+
     }
 
 
 
 
 
-    public static long getZeroCount(final long numOrg, final int jinsu) throws UbiveloxException
+    public static long getZeroCount(final long numOrg, final long decimal) throws UbiveloxException
     {
-        return getCount(numOrg, parser5(numOrg, jinsu));
+        long zeroCount = Long.MAX_VALUE;
+        long zeroCountTmp;
+
+        for ( Factor factor : getList(decimal) )
+        {
+            zeroCountTmp = getCount(numOrg, factor);
+
+            if ( zeroCount > zeroCountTmp )
+            {
+                zeroCount = zeroCountTmp;
+            }
+        }
+
+        return zeroCount;
     }
 
 
 
 
 
-    private static ArrayList<Factor> parser5(final long numOrg, final int jinsu) throws UbiveloxException
+    static List<Factor> getList(final long decimal) throws UbiveloxException
     {
-        ArrayList<Factor> list = new ArrayList<>();
-        int n = 2;
-        long number = jinsu;
-        long count = 0;
+        List<Factor> list = new ArrayList<>();
+        long n = 2l;
+        long number = decimal;
+        long count = 0l;
 
-        if ( jinsu == 1 || jinsu == 0 || jinsu < 0 )
+        if ( decimal < 2 )
         {
             throw new UbiveloxException("에러 : 값 1 또는 0 또는 음수");
         }
 
-        if ( jinsu == 2 )
+        if ( decimal == 2 )
         {
-            list.add(new Factor(jinsu, 1));
+            list.add(new Factor(decimal, 1l));
         }
         else
         {
@@ -109,11 +176,11 @@ public class Factorial
                 count = 0;
 
             }
-            while ( n != jinsu );
+            while ( number != 1 );
 
             if ( list.isEmpty() )
             {
-                list.add(new Factor(jinsu, 1));
+                list.add(new Factor(decimal, 1l));
             }
         }
 
@@ -124,55 +191,30 @@ public class Factorial
 
 
 
-    static long getCount(final long numOrg, final ArrayList<Factor> factoList) throws UbiveloxException
+    static long getCount(final long numOrg, final Factor factor) throws UbiveloxException
     {
-        long minZeroCount = Long.MAX_VALUE;
 
-        for ( int i = 0; i < factoList.size(); i++ )
+        long num = numOrg;
+        long numResult = 0; // 최소 공약수로 나누고 나온 몫을 더한 결과
+
+        if ( numOrg < 0 )
         {
-            long num = numOrg;
-            long minZeroCountTmp = 0;
-            long numResult = 0;
-            long expResult = 0;
-
-            if ( numOrg < 0 )
-            {
-                throw new UbiveloxException("에러 : 음수");
-            }
-
-            // 최소 공약수로 나누고 나온 몫을 더하는 작업
-            do
-            {
-                num /= factoList.get(i).number;
-                numResult += num;
-            }
-            while ( num != 1 && num != 0 );
-
-            // 더해진 몫에서 거듭제곱을 나눠 연속된 0을 카운트
-            if ( factoList.get(i).exponentiation == 1 )
-            {
-                // 만약 거듭제곱이 1이라면 최소 공약수로 나누고 나온 몫을 더한 결과 값이 0의 갯수
-                expResult = numResult;
-            }
-            else
-            {
-                while ( numResult % factoList.get(i).exponentiation == 0 )
-                {
-                    minZeroCountTmp++;
-                    numResult /= factoList.get(i).exponentiation;
-                }
-                expResult = minZeroCountTmp;
-            }
-
-            minZeroCountTmp = expResult;
-
-            if ( minZeroCount > minZeroCountTmp )
-            {
-                minZeroCount = minZeroCountTmp;
-            }
+            throw new UbiveloxException("에러 : 음수");
+        }
+        else if ( factor == null )
+        {
+            throw new UbiveloxException("에러 : Factor가 null 입니다.");
         }
 
-        return minZeroCount;
+        // 최소 공약수로 나누고 나온 몫을 더하는 작업
+        do
+        {
+            num /= factor.getNumber();
+            numResult += num;
+        }
+        while ( num > 1 );
+
+        return numResult / factor.getExponentiation();
 
     }
 
@@ -228,52 +270,6 @@ public class Factorial
         {
             count += num / 5;
             num /= 5;
-        }
-        while ( num != 0 );
-
-        return count;
-    }
-
-
-
-
-
-    static long getZeroCount4(final long numOrg, final long jinsu) throws UbiveloxException
-    {
-        long factor1 = 2;
-        long factor2 = 2;
-
-        if ( numOrg < 0 )
-        {
-            throw new UbiveloxException("에러 : 음수");
-        }
-        else if ( jinsu == 0 )
-        {
-            throw new UbiveloxException("에러 : 옳지 않은 진수");
-        }
-        else if ( jinsu == 1 )
-        {
-            return 0;
-        }
-
-        // 진수의 최소 공약수 하나랑 그에 먹는 약수
-        while ( jinsu % factor1 != 0 )
-        {
-            factor1++;
-        }
-
-        factor2 = (jinsu / factor1 < factor1 ? factor1 : jinsu / factor1);
-
-        System.out.println(factor1 + "/" + factor2);
-
-        long num = numOrg;
-        long count = 0;
-
-        do
-        {
-            count += num / factor2;
-            num /= factor2;
-
         }
         while ( num != 0 );
 
