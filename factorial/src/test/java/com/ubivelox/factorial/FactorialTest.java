@@ -17,10 +17,12 @@ public class FactorialTest
     @Test
     public void testGetZeroCount0() throws UbiveloxException
     {
+        System.out.println(Math.sqrt(27));
 
         List<Factor> list = new ArrayList<>();
         list.add(new Factor(2l, 2l));
         assertEquals(list, Factorial.getList(Integer.MAX_VALUE));
+        // assertEquals(list, Factorial.getList(2305843009213693951l));
     }
 
 
@@ -108,7 +110,9 @@ public class FactorialTest
         // 8진수일 때
         assertEquals(6, Factorial.getCount(20, new Factor(2l, 3l)));
 
-        assertEquals(114, Factorial.getZeroCount(690, 2 * 2 * 5 * 3 * 7 * 1));
+        assertEquals(57, Factorial.getZeroCount(690, 2 * 13 * 5 * 5 * 7));
+        assertEquals(52, Factorial.getZeroCount(850, 17));
+        assertEquals(6, Factorial.getZeroCount(20, 2 * 2 * 2));
 
         assertEquals(7, Factorial.getZeroCount(30, 15));
 

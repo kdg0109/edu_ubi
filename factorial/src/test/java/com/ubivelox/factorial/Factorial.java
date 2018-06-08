@@ -144,10 +144,9 @@ public class Factorial
     static List<Factor> getList(final long decimal) throws UbiveloxException
     {
         List<Factor> list = new ArrayList<>();
-        long n = 2l;
+        long n = 2;
         long number = decimal;
-        long count = 0l;
-
+        long count = 0;
         if ( decimal < 2 )
         {
             throw new UbiveloxException("에러 : 값 1 또는 0 또는 음수");
@@ -159,6 +158,17 @@ public class Factorial
         }
         else
         {
+
+            // 소수 판별
+            for ( int i = 2; i < Math.sqrt(decimal); i++ )
+            {
+                if ( Math.sqrt(decimal) % i == 0 )
+                {
+                    list.add(new Factor(decimal, 1));
+                    return list;
+                }
+            }
+
             do
             {
                 if ( number % n == 0 )
@@ -178,10 +188,73 @@ public class Factorial
             }
             while ( number != 1 );
 
-            if ( list.isEmpty() )
+            // 소수 판별
+            // if ( list.isEmpty() )
+            // {
+            // list.add(new Factor(decimal, 1l));
+            // }
+        }
+
+        return list;
+    }
+
+
+
+
+
+    static List<Factor> getList1(final long decimal) throws UbiveloxException
+    {
+        List<Factor> list = new ArrayList<>();
+        long n = 2;
+        long number = (long) Math.sqrt(decimal);
+        long count = 0;
+        if ( decimal < 2 )
+        {
+            throw new UbiveloxException("에러 : 값 1 또는 0 또는 음수");
+        }
+
+        if ( decimal == 2 )
+        {
+            list.add(new Factor(decimal, 1l));
+        }
+        else
+        {
+
+            // 소수 판별
+            for ( int i = 2; i < Math.sqrt(decimal); i++ )
             {
-                list.add(new Factor(decimal, 1l));
+                if ( Math.sqrt(decimal) % i == 0 )
+                {
+                    list.add(new Factor(decimal, 1));
+                    return list;
+                }
             }
+            // 루트를 한번 씌웠기 때문에 1이라는건 이미 값임
+            count += 2;
+            do
+            {
+                if ( number % n == 0 )
+                {
+                    while ( number % n == 0 )
+                    {
+
+                        number /= n;
+                        count += 2;
+                    }
+
+                    list.add(new Factor(n, count));
+                }
+                n++;
+                count = 0;
+
+            }
+            while ( number != 1 );
+
+            // 소수 판별
+            // if ( list.isEmpty() )
+            // {
+            // list.add(new Factor(decimal, 1l));
+            // }
         }
 
         return list;
