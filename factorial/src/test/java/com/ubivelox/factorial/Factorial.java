@@ -10,8 +10,8 @@ public class Factorial
 
     static class Factor
     {
-        long number;
-        long exponentiation;
+        long number;         // 최소 공약수
+        long exponentiation; // 거듭 제곱
 
 
 
@@ -21,16 +21,6 @@ public class Factorial
         {
             this.number = number;
             this.exponentiation = exponentiation;
-        }
-
-
-
-
-
-        @Override
-        public String toString()
-        {
-            return "Factor [number=" + this.number + ", exponentiation=" + this.exponentiation + "]";
         }
 
 
@@ -130,15 +120,10 @@ public class Factorial
         return list;
     }
 
-    // 1. jinsu의 최소공약수를 구함. 2,3,5,7,11,13 이런거 생기겠지 제곱도 생기고 22 31
-    // 2. num을 구해진 jinsu의 최소공약수 나누고 그때나온 몫들을 제곱으로 나눠. 그렇게 나온 수들이 최소공약수 갯수대로 나와
-    // 3. 2번에서 구한 값들의 최소 값이 0의 갯수임
 
 
 
 
-
-    // num는 숫자임
     static long getCount(final long numOrg, final ArrayList<Factor> factoList) throws UbiveloxException
     {
         long minZeroCount = Long.MAX_VALUE;
@@ -154,6 +139,8 @@ public class Factorial
             {
                 throw new UbiveloxException("에러 : 음수");
             }
+
+            // 최소 공약수로 나누고 나온 몫을 더하는 작업
             do
             {
                 num /= factoList.get(i).number;
@@ -161,9 +148,13 @@ public class Factorial
             }
             while ( num != 1 && num != 0 );
 
-            expResult = numResult;
-
-            if ( factoList.get(i).exponentiation != 1 )
+            // 더해진 몫에서 거듭제곱을 나눠 연속된 0을 카운트
+            if ( factoList.get(i).exponentiation == 1 )
+            {
+                // 만약 거듭제곱이 1이라면 최소 공약수로 나누고 나온 몫을 더한 결과 값이 0의 갯수
+                expResult = numResult;
+            }
+            else
             {
                 while ( numResult % factoList.get(i).exponentiation == 0 )
                 {
