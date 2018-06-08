@@ -27,6 +27,16 @@ public class Factorial
 
 
 
+        @Override
+        public String toString()
+        {
+            return "Factor [number=" + this.number + ", exponentiation=" + this.exponentiation + "]";
+        }
+
+
+
+
+
         public long getNumber()
         {
             return this.number;
@@ -67,7 +77,6 @@ public class Factorial
 
     public static long getZeroCount(final long numOrg, final int jinsu) throws UbiveloxException
     {
-        // return getCount(numOrg, parser5(numOrg, jinsu));
         return getCount(numOrg, parser5(numOrg, jinsu));
     }
 
@@ -86,29 +95,36 @@ public class Factorial
         {
             throw new UbiveloxException("에러 : 값 1 또는 0 또는 음수");
         }
-        do
-        {
-            if ( number % n == 0 )
-            {
-                while ( number % n == 0 )
-                {
 
-                    number /= n;
-                    count++;
-                }
-
-                System.out.println("n : " + n + " count : " + count);
-                list.add(new Factor(n, count));
-            }
-            n++;
-            count = 0;
-
-        }
-        while ( n != jinsu );
-
-        if ( list.isEmpty() )
+        if ( jinsu == 2 )
         {
             list.add(new Factor(jinsu, 1));
+        }
+        else
+        {
+            do
+            {
+                if ( number % n == 0 )
+                {
+                    while ( number % n == 0 )
+                    {
+
+                        number /= n;
+                        count++;
+                    }
+
+                    list.add(new Factor(n, count));
+                }
+                n++;
+                count = 0;
+
+            }
+            while ( n != jinsu );
+
+            if ( list.isEmpty() )
+            {
+                list.add(new Factor(jinsu, 1));
+            }
         }
 
         return list;

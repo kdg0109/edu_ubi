@@ -13,26 +13,24 @@ public class FactorialTest
     @Test
     public void testGetZeroCount() throws UbiveloxException
     {
-
-        // assertEquals(1, Factorial.getZeroCount(20, 19));
-        // assertEquals(4, Factorial.getZeroCount(20, 18));
-        // assertEquals(1, Factorial.getZeroCount(20, 17));
-        // assertEquals(4, Factorial.getZeroCount(20, 16));
-        // assertEquals(4, Factorial.getZeroCount(20, 15));
-        // assertEquals(2, Factorial.getZeroCount(20, 14));
-        // assertEquals(1, Factorial.getZeroCount(20, 13));
-        // assertEquals(8, Factorial.getZeroCount(20, 12));
-        // assertEquals(1, Factorial.getZeroCount(20, 11));
-        // assertEquals(4, Factorial.getZeroCount(20, 10));
-        // assertEquals(4, Factorial.getZeroCount(20, 9));
-        // assertEquals(6, Factorial.getZeroCount(20, 8));
-        // assertEquals(2, Factorial.getZeroCount(20, 7));
-        // assertEquals(8, Factorial.getZeroCount(20, 6));
-        // assertEquals(4, Factorial.getZeroCount(20, 5));
-        // assertEquals(9, Factorial.getZeroCount(20, 4));
-        // assertEquals(8, Factorial.getZeroCount(20, 3));
-        // assertEquals(18, Factorial.getZeroCount(20, 2));
-        assertEquals(1, Factorial.getZeroCount(15, 1));
+        assertEquals(1, Factorial.getZeroCount(20, 19));
+        assertEquals(3, Factorial.getZeroCount(20, 18));
+        assertEquals(1, Factorial.getZeroCount(20, 17));
+        assertEquals(0, Factorial.getZeroCount(20, 16));
+        assertEquals(4, Factorial.getZeroCount(20, 15));
+        assertEquals(2, Factorial.getZeroCount(20, 14));
+        assertEquals(1, Factorial.getZeroCount(20, 13));
+        assertEquals(1, Factorial.getZeroCount(20, 12));
+        assertEquals(1, Factorial.getZeroCount(20, 11));
+        assertEquals(4, Factorial.getZeroCount(20, 10));
+        assertEquals(3, Factorial.getZeroCount(20, 9));
+        assertEquals(2, Factorial.getZeroCount(20, 8));
+        assertEquals(2, Factorial.getZeroCount(20, 7));
+        assertEquals(8, Factorial.getZeroCount(20, 6));
+        assertEquals(4, Factorial.getZeroCount(20, 5));
+        assertEquals(1, Factorial.getZeroCount(20, 4));
+        assertEquals(8, Factorial.getZeroCount(20, 3));
+        assertEquals(18, Factorial.getZeroCount(20, 2));
         assertEquals(1, Factorial.getZeroCount(15, 9));
         assertEquals(0, Factorial.getZeroCount(15, 8));
         assertEquals(2, Factorial.getZeroCount(15, 7));
@@ -49,115 +47,6 @@ public class FactorialTest
         assertEquals(2, Factorial.getZeroCount(10, 5));
         assertEquals(3, Factorial.getZeroCount(10, 4));
         assertEquals(4, Factorial.getZeroCount(10, 3));
-
-        // System.out.println(Factorial.getCount(999999999, factoList));
-        // assertEquals(249999998, Factorial.getZeroCount(2147483645));
-
-        // assertEquals(499999997, Factorial.getZeroCount(Long.MAX_VALUE, 10));
-
-        System.out.println(Factorial.getZeroCount(Integer.MAX_VALUE, 10));
-        //
-        //
-        // assertEquals(499999988, Factorial.getZeroCount(1999999999));
-        // assertEquals(249999989, Factorial.getZeroCount(999999999));
-        //
-        // assertEquals(2499, Factorial.getZeroCount(10000));
-        // assertEquals(999, Factorial.getZeroCount(4000));
-        // assertEquals(499, Factorial.getZeroCount(2000));
-        // assertEquals(249, Factorial.getZeroCount(1000));
-        // assertEquals(124, Factorial.getZeroCount(500));
-        // assertEquals(74, Factorial.getZeroCount(300));
-        //
-        // assertEquals(46, Factorial.getZeroCount(190));
-        // assertEquals(41, Factorial.getZeroCount(170));
-        // assertEquals(37, Factorial.getZeroCount(150));
-        // assertEquals(32, Factorial.getZeroCount(130));
-        // assertEquals(26, Factorial.getZeroCount(110));
-        //
-        // assertEquals(24, Factorial.getZeroCount3(100));
-        // assertEquals(22, Factorial.getZeroCount(99));
-        // assertEquals(22, Factorial.getZeroCount(98));
-        // assertEquals(22, Factorial.getZeroCount(97));
-        // assertEquals(22, Factorial.getZeroCount(96));
-        //
-        // assertEquals(22, Factorial.getZeroCount(95));
-        // assertEquals(21, Factorial.getZeroCount(94));
-        // assertEquals(21, Factorial.getZeroCount(93));
-        // assertEquals(21, Factorial.getZeroCount(92));
-        // assertEquals(21, Factorial.getZeroCount(91));
-        //
-        // assertEquals(21, Factorial.getZeroCount(90));
-        // assertEquals(20, Factorial.getZeroCount(89));
-        // assertEquals(20, Factorial.getZeroCount(88));
-        // assertEquals(20, Factorial.getZeroCount(87));
-        // assertEquals(20, Factorial.getZeroCount(86));
-        //
-        // assertEquals(20, Factorial.getZeroCount(85));
-        // assertEquals(19, Factorial.getZeroCount(84));
-        // assertEquals(19, Factorial.getZeroCount(83));
-        // assertEquals(19, Factorial.getZeroCount(82));
-        // assertEquals(19, Factorial.getZeroCount(81));
-        //
-        // assertEquals(19, Factorial.getZeroCount(80));
-        // assertEquals(18, Factorial.getZeroCount(79));
-        // assertEquals(18, Factorial.getZeroCount(78));
-        // assertEquals(18, Factorial.getZeroCount(77));
-        // assertEquals(18, Factorial.getZeroCount(76));
-        //
-        // assertEquals(18, Factorial.getZeroCount(75));
-        // assertEquals(16, Factorial.getZeroCount(74));
-        // assertEquals(16, Factorial.getZeroCount(73));
-        // assertEquals(16, Factorial.getZeroCount(72));
-        // assertEquals(16, Factorial.getZeroCount(71));
-        //
-        // assertEquals(16, Factorial.getZeroCount(70));
-        // assertEquals(15, Factorial.getZeroCount(69));
-        // assertEquals(15, Factorial.getZeroCount(68));
-        // assertEquals(15, Factorial.getZeroCount(67));
-        // assertEquals(15, Factorial.getZeroCount(66));
-        //
-        // assertEquals(15, Factorial.getZeroCount(65));
-        // assertEquals(14, Factorial.getZeroCount(64));
-        // assertEquals(14, Factorial.getZeroCount(63));
-        // assertEquals(14, Factorial.getZeroCount(62));
-        // assertEquals(14, Factorial.getZeroCount(61));
-        //
-        // assertEquals(14, Factorial.getZeroCount(60));
-        // assertEquals(13, Factorial.getZeroCount(59));
-        // assertEquals(13, Factorial.getZeroCount(58));
-        // assertEquals(13, Factorial.getZeroCount(57));
-        // assertEquals(13, Factorial.getZeroCount(56));
-        //
-        // assertEquals(13, Factorial.getZeroCount(55));
-        // assertEquals(12, Factorial.getZeroCount(54));
-        // assertEquals(12, Factorial.getZeroCount(53));
-        // assertEquals(12, Factorial.getZeroCount(52));
-        // assertEquals(12, Factorial.getZeroCount(51));
-        //
-        // assertEquals(12, Factorial.getZeroCount(50));
-        // assertEquals(10, Factorial.getZeroCount(49));
-        // assertEquals(10, Factorial.getZeroCount(48));
-        // assertEquals(10, Factorial.getZeroCount(47));
-        // assertEquals(10, Factorial.getZeroCount(46));
-        //
-        // assertEquals(10, Factorial.getZeroCount(45));
-        // assertEquals(9, Factorial.getZeroCount(44));
-        // assertEquals(9, Factorial.getZeroCount(43));
-        // assertEquals(9, Factorial.getZeroCount(42));
-        // assertEquals(9, Factorial.getZeroCount(41));
-        //
-        // assertEquals(9, Factorial.getZeroCount(40));
-        // assertEquals(8, Factorial.getZeroCount(39));
-        // assertEquals(8, Factorial.getZeroCount(38));
-        // assertEquals(8, Factorial.getZeroCount(37));
-        // assertEquals(8, Factorial.getZeroCount(36));
-        //
-        // assertEquals(8, Factorial.getZeroCount(35));
-        // assertEquals(7, Factorial.getZeroCount(34));
-        // assertEquals(7, Factorial.getZeroCount(33));
-        // assertEquals(7, Factorial.getZeroCount(32));
-        // assertEquals(7, Factorial.getZeroCount(31));
-        //
 
         assertEquals(7, Factorial.getZeroCount(30, 10));
         assertEquals(6, Factorial.getZeroCount(29, 10));
@@ -195,6 +84,117 @@ public class FactorialTest
         assertEquals(0, Factorial.getZeroCount(2, 10));
         assertEquals(0, Factorial.getZeroCount(1, 10));
         assertEquals(0, Factorial.getZeroCount(0, 10));
+
+        //
+        // // System.out.println(Factorial.getCount(999999999, factoList));
+        // // assertEquals(249999998, Factorial.getZeroCount(2147483645));
+        //
+        // // assertEquals(499999997, Factorial.getZeroCount(Long.MAX_VALUE, 10));
+        //
+        // System.out.println(Factorial.getZeroCount(Integer.MAX_VALUE, 10));
+        // //
+        // //
+        // // assertEquals(499999988, Factorial.getZeroCount(1999999999));
+        // // assertEquals(249999989, Factorial.getZeroCount(999999999));
+        // //
+        // // assertEquals(2499, Factorial.getZeroCount(10000));
+        // // assertEquals(999, Factorial.getZeroCount(4000));
+        // // assertEquals(499, Factorial.getZeroCount(2000));
+        // // assertEquals(249, Factorial.getZeroCount(1000));
+        // // assertEquals(124, Factorial.getZeroCount(500));
+        // // assertEquals(74, Factorial.getZeroCount(300));
+        // //
+        // // assertEquals(46, Factorial.getZeroCount(190));
+        // // assertEquals(41, Factorial.getZeroCount(170));
+        // // assertEquals(37, Factorial.getZeroCount(150));
+        // // assertEquals(32, Factorial.getZeroCount(130));
+        // // assertEquals(26, Factorial.getZeroCount(110));
+        // //
+        // // assertEquals(24, Factorial.getZeroCount3(100));
+        // // assertEquals(22, Factorial.getZeroCount(99));
+        // // assertEquals(22, Factorial.getZeroCount(98));
+        // // assertEquals(22, Factorial.getZeroCount(97));
+        // // assertEquals(22, Factorial.getZeroCount(96));
+        // //
+        // // assertEquals(22, Factorial.getZeroCount(95));
+        // // assertEquals(21, Factorial.getZeroCount(94));
+        // // assertEquals(21, Factorial.getZeroCount(93));
+        // // assertEquals(21, Factorial.getZeroCount(92));
+        // // assertEquals(21, Factorial.getZeroCount(91));
+        // //
+        // // assertEquals(21, Factorial.getZeroCount(90));
+        // // assertEquals(20, Factorial.getZeroCount(89));
+        // // assertEquals(20, Factorial.getZeroCount(88));
+        // // assertEquals(20, Factorial.getZeroCount(87));
+        // // assertEquals(20, Factorial.getZeroCount(86));
+        // //
+        // // assertEquals(20, Factorial.getZeroCount(85));
+        // // assertEquals(19, Factorial.getZeroCount(84));
+        // // assertEquals(19, Factorial.getZeroCount(83));
+        // // assertEquals(19, Factorial.getZeroCount(82));
+        // // assertEquals(19, Factorial.getZeroCount(81));
+        // //
+        // // assertEquals(19, Factorial.getZeroCount(80));
+        // // assertEquals(18, Factorial.getZeroCount(79));
+        // // assertEquals(18, Factorial.getZeroCount(78));
+        // // assertEquals(18, Factorial.getZeroCount(77));
+        // // assertEquals(18, Factorial.getZeroCount(76));
+        // //
+        // // assertEquals(18, Factorial.getZeroCount(75));
+        // // assertEquals(16, Factorial.getZeroCount(74));
+        // // assertEquals(16, Factorial.getZeroCount(73));
+        // // assertEquals(16, Factorial.getZeroCount(72));
+        // // assertEquals(16, Factorial.getZeroCount(71));
+        // //
+        // // assertEquals(16, Factorial.getZeroCount(70));
+        // // assertEquals(15, Factorial.getZeroCount(69));
+        // // assertEquals(15, Factorial.getZeroCount(68));
+        // // assertEquals(15, Factorial.getZeroCount(67));
+        // // assertEquals(15, Factorial.getZeroCount(66));
+        // //
+        // // assertEquals(15, Factorial.getZeroCount(65));
+        // // assertEquals(14, Factorial.getZeroCount(64));
+        // // assertEquals(14, Factorial.getZeroCount(63));
+        // // assertEquals(14, Factorial.getZeroCount(62));
+        // // assertEquals(14, Factorial.getZeroCount(61));
+        // //
+        // // assertEquals(14, Factorial.getZeroCount(60));
+        // // assertEquals(13, Factorial.getZeroCount(59));
+        // // assertEquals(13, Factorial.getZeroCount(58));
+        // // assertEquals(13, Factorial.getZeroCount(57));
+        // // assertEquals(13, Factorial.getZeroCount(56));
+        // //
+        // // assertEquals(13, Factorial.getZeroCount(55));
+        // // assertEquals(12, Factorial.getZeroCount(54));
+        // // assertEquals(12, Factorial.getZeroCount(53));
+        // // assertEquals(12, Factorial.getZeroCount(52));
+        // // assertEquals(12, Factorial.getZeroCount(51));
+        // //
+        // // assertEquals(12, Factorial.getZeroCount(50));
+        // // assertEquals(10, Factorial.getZeroCount(49));
+        // // assertEquals(10, Factorial.getZeroCount(48));
+        // // assertEquals(10, Factorial.getZeroCount(47));
+        // // assertEquals(10, Factorial.getZeroCount(46));
+        // //
+        // // assertEquals(10, Factorial.getZeroCount(45));
+        // // assertEquals(9, Factorial.getZeroCount(44));
+        // // assertEquals(9, Factorial.getZeroCount(43));
+        // // assertEquals(9, Factorial.getZeroCount(42));
+        // // assertEquals(9, Factorial.getZeroCount(41));
+        // //
+        // // assertEquals(9, Factorial.getZeroCount(40));
+        // // assertEquals(8, Factorial.getZeroCount(39));
+        // // assertEquals(8, Factorial.getZeroCount(38));
+        // // assertEquals(8, Factorial.getZeroCount(37));
+        // // assertEquals(8, Factorial.getZeroCount(36));
+        // //
+        // // assertEquals(8, Factorial.getZeroCount(35));
+        // // assertEquals(7, Factorial.getZeroCount(34));
+        // // assertEquals(7, Factorial.getZeroCount(33));
+        // // assertEquals(7, Factorial.getZeroCount(32));
+        // // assertEquals(7, Factorial.getZeroCount(31));
+        // //
+        //
 
     }
 
