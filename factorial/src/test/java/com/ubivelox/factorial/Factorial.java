@@ -123,8 +123,7 @@ public class Factorial
     {
         long zeroCount = Long.MAX_VALUE;
         long zeroCountTmp;
-
-        for ( Factor factor : getList(decimal) )
+        for ( Factor factor : getFractionalDecomposition(decimal) )
         {
             zeroCountTmp = getCount(numOrg, factor);
 
@@ -147,6 +146,7 @@ public class Factorial
         long n = 2;
         long number = decimal;
         long count = 0;
+
         if ( decimal < 2 )
         {
             throw new UbiveloxException("에러 : 값 1 또는 0 또는 음수");
@@ -156,44 +156,30 @@ public class Factorial
         {
             list.add(new Factor(decimal, 1l));
         }
-        else
+
+        do
         {
-
-            // 소수 판별
-            for ( int i = 2; i < Math.sqrt(decimal); i++ )
+            if ( number % n == 0 )
             {
-                if ( Math.sqrt(decimal) % i == 0 )
+                while ( number % n == 0 )
                 {
-                    list.add(new Factor(decimal, 1));
-                    return list;
+
+                    number /= n;
+                    count++;
                 }
+                list.add(new Factor(n, count));
             }
+            n++;
+            count = 0;
 
-            do
-            {
-                if ( number % n == 0 )
-                {
-                    while ( number % n == 0 )
-                    {
-
-                        number /= n;
-                        count++;
-                    }
-
-                    list.add(new Factor(n, count));
-                }
-                n++;
-                count = 0;
-
-            }
-            while ( number != 1 );
-
-            // 소수 판별
-            // if ( list.isEmpty() )
-            // {
-            // list.add(new Factor(decimal, 1l));
-            // }
         }
+        while ( number != 1 );
+
+        // 소수 판별
+        // if ( list.isEmpty() )
+        // {
+        // list.add(new Factor(decimal, 1l));
+        // }
 
         return list;
     }
@@ -202,59 +188,57 @@ public class Factorial
 
 
 
-    static List<Factor> getList1(final long decimal) throws UbiveloxException
+    static List<Factor> getFractionalDecomposition(final long decimal) throws UbiveloxException
     {
         List<Factor> list = new ArrayList<>();
         long n = 2;
-        long number = (long) Math.sqrt(decimal);
+        long number = decimal;
+        double sqrtn = Math.sqrt(number);
         long count = 0;
+
         if ( decimal < 2 )
         {
             throw new UbiveloxException("에러 : 값 1 또는 0 또는 음수");
         }
-
-        if ( decimal == 2 )
+        else if ( decimal == 2 )
         {
             list.add(new Factor(decimal, 1l));
         }
         else
         {
 
-            // 소수 판별
-            for ( int i = 2; i < Math.sqrt(decimal); i++ )
-            {
-                if ( Math.sqrt(decimal) % i == 0 )
-                {
-                    list.add(new Factor(decimal, 1));
-                    return list;
-                }
-            }
-            // 루트를 한번 씌웠기 때문에 1이라는건 이미 값임
-            count += 2;
             do
             {
                 if ( number % n == 0 )
                 {
+
                     while ( number % n == 0 )
                     {
-
                         number /= n;
-                        count += 2;
+                        count++;
                     }
 
                     list.add(new Factor(n, count));
                 }
+
                 n++;
                 count = 0;
 
             }
-            while ( number != 1 );
+            while ( number != 1 && n <= sqrtn );
 
             // 소수 판별
-            // if ( list.isEmpty() )
-            // {
-            // list.add(new Factor(decimal, 1l));
-            // }
+            if ( list.isEmpty() )
+            {
+                list.add(new Factor(decimal, 1));
+            }
+            else
+            {
+                if ( number != 1 )
+                { // 진수의 마지막 약수가 number에 남아 있음
+                    list.add(new Factor(number, 1));
+                }
+            }
         }
 
         return list;
@@ -353,7 +337,8 @@ public class Factorial
 
 
 
-    // 곱하고 10으로 나눴을 때 나머지가 0이라면 곱한 결과 값이 10배수니까 count올리고 /10을 하여 다시 0이 없는 값으로 변경시킨다.
+    // 곱하고 10으로 나눴을 때 나머지가 0이라면 곱한 결과 값이 10배수니까 count올리고 /10을 하여 다시 0이 없는 값으로
+    // 변경시킨다.
     // 만약 result가 190라면 count++해주고 19로 만들어줌
     public static int getZeroCount1(final int numOrg) throws UbiveloxException
     {
