@@ -28,11 +28,14 @@ public class Ddes
                                    , 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47};
         //@formatter:on
 
+        String KSP = "404142434445464748494A4B4C4D4E4F";
+
         SecretKeyFactory keyFactory = null;
 
         keyFactory = SecretKeyFactory.getInstance(encryptType);
 
-        DESedeKeySpec desKeySpec = new DESedeKeySpec(keyData);
+        // DESedeKeySpec desKeySpec = new DESedeKeySpec(keyData);
+        DESedeKeySpec desKeySpec = new DESedeKeySpec((KSP + KSP.substring(0, KSP.length() / 2)).getBytes());
 
         Key key = keyFactory.generateSecret(desKeySpec);
 
