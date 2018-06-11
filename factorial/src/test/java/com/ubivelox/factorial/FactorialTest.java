@@ -25,8 +25,9 @@ public class FactorialTest
         // assertEquals(7, Factorial.getZeroCount(Long.MAX_VALUE, Long.MAX_VALUE));
         // assertEquals(7, Factorial.getZeroCount(30, Integer.MAX_VALUE));
         // assertEquals(7, Factorial.getZeroCount(30, 9223372036854775800l));
-
-        // assertEquals(7, Factorial.getZeroCount(Long.MAX_VALUE, Long.MAX_VALUE));
+        assertEquals(24, Factorial.getZeroCount(400, 17));
+        System.out.println(Factorial.getZeroCount(Long.MAX_VALUE, Long.MAX_VALUE));
+        System.out.println(Factorial.getZeroCount(Integer.MAX_VALUE, Integer.MAX_VALUE));
         assertEquals(222222222221l, Factorial.getZeroCount(77777777777777l, 71 * 71 * 71 * 71 * 71));
         assertEquals(24976807249l, Factorial.getZeroCount(77777777777777l, 1039 * 1039 * 1039));
         assertEquals(37465210874l, Factorial.getZeroCount(77777777777777l, 1039 * 1039));
@@ -145,7 +146,6 @@ public class FactorialTest
         // 8진수일 때
         assertEquals(6, Factorial.getCount(20, new Factor(2l, 3l)));
 
-        assertEquals(60, Factorial.getZeroCount(6800, 2 * 13 * 5 * 5 * 7 * 29 * 29 * 29 * 29));
         assertEquals(57, Factorial.getZeroCount(690, 2 * 13 * 5 * 5 * 7));
         assertEquals(52, Factorial.getZeroCount(850, 17));
         assertEquals(6, Factorial.getZeroCount(20, 2 * 2 * 2));
@@ -171,14 +171,6 @@ public class FactorialTest
         assertEquals(18, Factorial.getZeroCount(40, 12));
         assertEquals(4, Factorial.getZeroCount(20, 9));
         assertEquals(6, Factorial.getZeroCount(20, 8));
-
-        //
-        // // // System.out.println(Factorial.getCount(999999999, factoList));
-        // // assertEquals(249999998, Factorial.getZeroCount(2147483645));
-
-        // // assertEquals(499999997, Factorial.getZeroCount(Long.MAX_VALUE, 10));
-
-        // System.out.println(Factorial.getZeroCount(Integer.MAX_VALUE, 10));
 
         assertEquals(499999988, Factorial.getZeroCount(1999999999, 10));
         assertEquals(249999989, Factorial.getZeroCount(999999999, 10));
