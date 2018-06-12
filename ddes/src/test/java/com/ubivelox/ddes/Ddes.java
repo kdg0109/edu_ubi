@@ -34,8 +34,8 @@ public class Ddes
 
         keyFactory = SecretKeyFactory.getInstance(encryptType);
 
-        // DESedeKeySpec desKeySpec = new DESedeKeySpec(keyData);
-        DESedeKeySpec desKeySpec = new DESedeKeySpec((KSP + KSP.substring(0, KSP.length() / 2)).getBytes());
+        DESedeKeySpec desKeySpec = new DESedeKeySpec(keyData);
+        // DESedeKeySpec desKeySpec = new DESedeKeySpec((KSP + KSP.substring(0, KSP.length() / 2)).getBytes());
 
         Key key = keyFactory.generateSecret(desKeySpec);
 
@@ -52,14 +52,15 @@ public class Ddes
 
 
     // 암호화 하기
-    public static String getEncrypt(final String plainText, final String encryptType) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
+    public static String encrypt(final String HexPlainText, final String encryptType) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
             BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException
     {
-        GaiaUtils.checkNullOrEmpty(plainText, encryptType);
+        GaiaUtils.checkHexaString(HexPlainText);
+        GaiaUtils.checkNullOrEmpty(encryptType);
 
         Cipher cipher = setInit(encryptType, Cipher.ENCRYPT_MODE);
 
-        byte[] inputBytes = plainText.getBytes("UTF8");
+        byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(HexPlainText);
 
         byte[] outputBytes = cipher.doFinal(inputBytes);
 
@@ -71,7 +72,7 @@ public class Ddes
 
 
     // 복호화 하기
-    public static String getDecryption(final String cipherText, final String encryptType) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
+    public static String decrypt(final String cipherText, final String encryptType) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
             BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException
     {
         GaiaUtils.checkNullOrEmpty(cipherText, encryptType);
