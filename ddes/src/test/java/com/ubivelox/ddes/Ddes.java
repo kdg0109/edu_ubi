@@ -26,170 +26,174 @@ import javax.crypto.spec.SecretKeySpec;
 import com.ubivelox.gaia.GaiaException;
 import com.ubivelox.gaia.util.GaiaUtils;
 
-public class Ddes
-{
-    // 초기화 및 키 생성
-    public static Cipher setInit(final String encryptType, final int opmode, final String transformation)
-            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException, GaiaException, InvalidAlgorithmParameterException
-    {
-      //@formatter:off
-        byte[] keyData24 = new byte[] {
-                                     0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47
-                                   , 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F
-                                   , 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47};
+public class Ddes {
+	// 초기화 및 키 생성
+	public static Cipher setInit(final String encryptType, final int opmode, final String transformation)
+			throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException,
+			GaiaException, InvalidAlgorithmParameterException {
+		// @formatter:off
+		byte[] keyData24 = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C,
+				0x4D, 0x4E, 0x4F, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47 };
 
+		//AES
+		byte[] keyData16 = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C,
+				0x4D, 0x4E, 0x4F };
 
-        byte[] keyData16 = new byte[] {
-                                       0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47
-                                     , 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F};
+		//DES
+		byte[] keyData8 = new byte[] { 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47 };
 
-        byte[] keyData8 = new byte[] {
-                                       0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47};
+		// @formatter:on
 
-        //@formatter:on
+		Cipher cipher = null;
 
-        Cipher cipher = null;
+		if (transformation.contains("DESede")) {
+			SecretKeyFactory keyFactory = null;
 
-        if ( transformation.contains("DESede") )
-        {
-            SecretKeyFactory keyFactory = null;
+			keyFactory = SecretKeyFactory.getInstance(encryptType);
 
-            keyFactory = SecretKeyFactory.getInstance(encryptType);
+			DESedeKeySpec desKeySpec = new DESedeKeySpec(keyData24);
 
-            DESedeKeySpec desKeySpec = new DESedeKeySpec(keyData24);
-            Key key = keyFactory.generateSecret(desKeySpec);
+			Key key = keyFactory.generateSecret(desKeySpec);
 
-            cipher = Cipher.getInstance(transformation);
-            cipher.init(opmode, key);
+			cipher = Cipher.getInstance(transformation);
+			cipher.init(opmode, key);
 
-        }
-        else if ( transformation.contains("AES") )
-        {
-            SecretKeySpec keySpec = null;
+			// DES 8비트 키
+		} else if (transformation.contains("DES/CBC")) {
+			SecretKeySpec keySpec = null;
 
-            keySpec = new SecretKeySpec(keyData16, encryptType);
+			keySpec = new SecretKeySpec(keyData8, encryptType);
 
-            IvParameterSpec parameterSpec = new IvParameterSpec(keyData16);
-            Key key = keySpec;
+			// iv를 0으로 초기화
+			byte[] iv = new byte[8];
 
-            cipher = Cipher.getInstance(transformation);
-            cipher.init(opmode, key, parameterSpec);
+			IvParameterSpec parameterSpec = new IvParameterSpec(iv);
 
-        }
-        else if ( transformation.contains("DES") )
-        {
-            SecretKeyFactory keyFactory = null;
+			Key key = keySpec;
 
-            keyFactory = SecretKeyFactory.getInstance(encryptType);
+			cipher = Cipher.getInstance(transformation);
+			cipher.init(opmode, key, parameterSpec);
 
-            DESKeySpec desKeySpec = new DESKeySpec(keyData8);
-            Key key = keyFactory.generateSecret(desKeySpec);
+		} else if (transformation.contains("DES/ECB")) {
+			SecretKeyFactory keyFactory = null;
 
-            cipher = Cipher.getInstance(transformation);
-            cipher.init(opmode, key);
+			keyFactory = SecretKeyFactory.getInstance(encryptType);
 
-        }
+			DESKeySpec desKeySpec = new DESKeySpec(keyData8);
 
-        return cipher;
-    }
+			Key key = keyFactory.generateSecret(desKeySpec);
 
+			cipher = Cipher.getInstance(transformation);
+			cipher.init(opmode, key);
 
+			//AES 16비트 키
+		} else if (transformation.contains("AES")) {
+			SecretKeySpec keySpec = null;
 
+			keySpec = new SecretKeySpec(keyData16, encryptType);
 
+			Key key = keySpec;
+			cipher = Cipher.getInstance(transformation);
+			
+			if(transformation.contains("ECB")){
+				cipher.init(opmode, key);
+				
+			}else if(transformation.contains("CBC")){
+				byte[] iv = new byte[16];
+				IvParameterSpec parameterSpec = new IvParameterSpec(iv);
+				cipher.init(opmode, key, parameterSpec);
+			}
+		}
 
-    // 암호화 하기
-    public static String encrypt(final String HexPlainText, final String encryptType, final String transformation) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
-            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException, InvalidAlgorithmParameterException
-    {
-        GaiaUtils.checkHexaString(HexPlainText);
-        GaiaUtils.checkNullOrEmpty(encryptType);
+		return cipher;
+	}
 
-        Cipher cipher = setInit(encryptType, Cipher.ENCRYPT_MODE, transformation);
+	// 암호화 하기
+	/*
+	 * encryptType : 암호화 종류 transformation : 암호화 방법
+	 */
+	public static String encrypt(final String HexPlainText, final String encryptType, final String transformation)
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
+			BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException {
+		GaiaUtils.checkHexaString(HexPlainText);
+		GaiaUtils.checkNullOrEmpty(encryptType, transformation);
 
-        byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(HexPlainText);
+		Cipher cipher = setInit(encryptType, Cipher.ENCRYPT_MODE, transformation);
 
-        byte[] outputBytes = cipher.doFinal(inputBytes);
+		byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(HexPlainText);
 
-        return GaiaUtils.convertByteArrayToHexaString(outputBytes);
-    }
+		byte[] outputBytes = cipher.doFinal(inputBytes);
 
+		return GaiaUtils.convertByteArrayToHexaString(outputBytes);
+	}
 
+	// 복호화 하기
+	public static String decrypt(final String cipherText, final String encryptType, final String transformation)
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
+			BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException,
+			InvalidAlgorithmParameterException {
+		GaiaUtils.checkNullOrEmpty(cipherText, encryptType, transformation);
 
+		Cipher cipher = setInit(encryptType, Cipher.DECRYPT_MODE, transformation);
 
+		byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(cipherText);
 
-    // 복호화 하기
-    public static String decrypt(final String cipherText, final String encryptType, final String transformation) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
-            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException, InvalidAlgorithmParameterException
-    {
-        GaiaUtils.checkNullOrEmpty(cipherText, encryptType);
+		byte[] outputBytes = cipher.doFinal(inputBytes);
 
-        Cipher cipher = setInit(encryptType, Cipher.DECRYPT_MODE, transformation);
+		return new String(outputBytes, "UTF8");
+	}
 
-        byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(cipherText);
+	public static String rsa(final String HexPlainText, final String encryptType)
+			throws NoSuchAlgorithmException, NoSuchProviderException, GaiaException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		String strResult = "";
 
-        byte[] outputBytes = cipher.doFinal(inputBytes);
+		GaiaUtils.checkHexaString(HexPlainText);
 
-        return new String(outputBytes, "UTF8");
-    }
+		// RSA 공개키/개인키를 생성한다.
 
+		KeyPairGenerator clsKeyPairGenerator = KeyPairGenerator.getInstance(encryptType);
 
+		clsKeyPairGenerator.initialize(2048);
 
+		KeyPair clsKeyPair = clsKeyPairGenerator.genKeyPair();
 
+		Key clsPublicKey = clsKeyPair.getPublic();
 
-    public static String rsa(final String HexPlainText) throws NoSuchAlgorithmException, NoSuchProviderException
-    {
-        String strResult = "";
-        try
-        {
+		Key clsPrivateKey = clsKeyPair.getPrivate();
 
-            // RSA 공개키/개인키를 생성한다.
+		// KeyFactory fact = KeyFactory.getInstance(encryptType);
+		// RSAPublicKeySpec publicKeySpec = fact.getKeySpec(clsPublicKey,
+		// RSAPublicKeySpec.class);
+		// RSAPrivateKeySpec privateKeySpec = fact.getKeySpec(clsPrivateKey,
+		// RSAPrivateKeySpec.class);
+		// System.out.println("public key modulus(" +
+		// clsPublicKeySpec.getModulus() + ") exponent(" +
+		// clsPublicKeySpec.getPublicExponent() + ")");
+		// System.out.println("private key modulus(" +
+		// clsPrivateKeySpec.getModulus() + ") exponent(" +
+		// clsPrivateKeySpec.getPrivateExponent() + ")");
 
-            KeyPairGenerator clsKeyPairGenerator = KeyPairGenerator.getInstance("RSA");
+		// 암호화 한다.
+		Cipher cipher = Cipher.getInstance(encryptType);
 
-            clsKeyPairGenerator.initialize(2048);
+		cipher.init(Cipher.ENCRYPT_MODE, clsPublicKey);
 
-            KeyPair clsKeyPair = clsKeyPairGenerator.genKeyPair();
+		byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(HexPlainText);
 
-            Key clsPublicKey = clsKeyPair.getPublic();
+		byte[] arrCipherData = cipher.doFinal(inputBytes);
 
-            Key clsPrivateKey = clsKeyPair.getPrivate();
+		// String strCipher = new String(arrCipherData);
+		// System.out.println(strCipher);
+		// System.out.println();
 
-            KeyFactory fact = KeyFactory.getInstance("RSA");
+		// 복호화 한다.
+		cipher.init(Cipher.DECRYPT_MODE, clsPrivateKey);
 
-            RSAPublicKeySpec clsPublicKeySpec = fact.getKeySpec(clsPublicKey, RSAPublicKeySpec.class);
+		byte[] arrData = cipher.doFinal(arrCipherData);
 
-            RSAPrivateKeySpec clsPrivateKeySpec = fact.getKeySpec(clsPrivateKey, RSAPrivateKeySpec.class);
+		strResult = new String(arrData);
 
-            System.out.println("public key modulus(" + clsPublicKeySpec.getModulus() + ") exponent(" + clsPublicKeySpec.getPublicExponent() + ")");
-
-            System.out.println("private key modulus(" + clsPrivateKeySpec.getModulus() + ") exponent(" + clsPrivateKeySpec.getPrivateExponent() + ")");
-
-            // 암호화 한다.
-            Cipher clsCipher = Cipher.getInstance("RSA");
-
-            clsCipher.init(Cipher.ENCRYPT_MODE, clsPublicKey);
-
-            byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(HexPlainText);
-
-            byte[] arrCipherData = clsCipher.doFinal(inputBytes);
-
-            String strCipher = new String(arrCipherData);
-
-            System.out.println("cipher(" + strCipher + ")");
-
-            // 복호화 한다.
-            clsCipher.init(Cipher.DECRYPT_MODE, clsPrivateKey);
-
-            byte[] arrData = clsCipher.doFinal(arrCipherData);
-
-            strResult = new String(arrData);
-
-        }
-        catch ( Exception e )
-        {
-
-        }
-
-        return strResult;
-    }
+		return strResult;
+	}
 }
