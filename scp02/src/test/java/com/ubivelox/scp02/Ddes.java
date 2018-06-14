@@ -1,4 +1,4 @@
-package com.ubivelox.ddes;
+package com.ubivelox.scp02;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -17,7 +17,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -27,7 +26,7 @@ import com.ubivelox.gaia.util.GaiaUtils;
 public class Ddes
 {
     // 초기화 및 키 생성
-    public static Cipher setInit(final String encryptType, final int opmode, final String transformation)
+    public static Cipher setInit(final String encryptType, final int opmode, final String transformation, final byte[] baseKey)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException, GaiaException, InvalidAlgorithmParameterException
     {
         // @formatter:off
@@ -48,22 +47,9 @@ public class Ddes
         if ( transformation.contains("DESede") )
         {
 
-            if ( transformation.contains("ECB") )
+            if ( transformation.contains("CBC") )
             {
-                SecretKeyFactory keyFactory = null;
-
-                keyFactory = SecretKeyFactory.getInstance(encryptType);
-
-                DESedeKeySpec desKeySpec = new DESedeKeySpec(keyData24);
-
-                Key key = keyFactory.generateSecret(desKeySpec);
-
-                cipher = Cipher.getInstance(transformation);
-                cipher.init(opmode, key);
-            }
-            else if ( transformation.contains("CBC") )
-            {
-                SecretKey key = new SecretKeySpec(keyData24, encryptType);
+                SecretKey key = new SecretKeySpec(baseKey, encryptType);
 
                 byte[] iv = new byte[8];
                 IvParameterSpec parameterSpec = new IvParameterSpec(iv);
@@ -140,13 +126,13 @@ public class Ddes
     /*
      * encryptType : 암호화 종류 transformation : 암호화 방법
      */
-    public static String encrypt(final String HexPlainText, final String encryptType, final String transformation) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
-            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException, InvalidAlgorithmParameterException
+    public static String encrypt(final String HexPlainText, final String encryptType, final String transformation, final byte[] baseKey) throws InvalidKeyException, NoSuchAlgorithmException,
+            NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException, InvalidAlgorithmParameterException
     {
         GaiaUtils.checkHexaString(HexPlainText);
         GaiaUtils.checkNullOrEmpty(encryptType, transformation);
 
-        Cipher cipher = setInit(encryptType, Cipher.ENCRYPT_MODE, transformation);
+        Cipher cipher = setInit(encryptType, Cipher.ENCRYPT_MODE, transformation, baseKey);
 
         byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(HexPlainText);
 
@@ -160,12 +146,12 @@ public class Ddes
 
 
     // 복호화 하기
-    public static String decrypt(final String cipherText, final String encryptType, final String transformation) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
-            IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException, InvalidAlgorithmParameterException
+    public static String decrypt(final String cipherText, final String encryptType, final String transformation, final byte[] baseKey) throws InvalidKeyException, NoSuchAlgorithmException,
+            NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException, GaiaException, InvalidKeySpecException, InvalidAlgorithmParameterException
     {
         GaiaUtils.checkNullOrEmpty(cipherText, encryptType, transformation);
 
-        Cipher cipher = setInit(encryptType, Cipher.DECRYPT_MODE, transformation);
+        Cipher cipher = setInit(encryptType, Cipher.DECRYPT_MODE, transformation, baseKey);
 
         byte[] inputBytes = GaiaUtils.convertHexaStringToByteArray(cipherText);
 
