@@ -183,7 +183,7 @@ public class Scp02
             String sequenceCounter = D2.substring(24, 28);
 
             String cardChallenge = D2.substring(28, 40);
-
+ 
             String sessionkey = getSessionKeyENC("S-ENC", sequenceCounter);
             byte[] sessionkeyArray = GaiaUtils.convertHexaStringToByteArray(sessionkey + sessionkey.substring(0, sessionkey.length() / 2));
 
