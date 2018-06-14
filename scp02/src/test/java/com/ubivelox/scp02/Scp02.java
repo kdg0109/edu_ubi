@@ -183,7 +183,7 @@ public class Scp02
             String sequenceCounter = D2.substring(24, 28);
 
             String cardChallenge = D2.substring(28, 40);
- 
+
             String sessionkey = getSessionKeyENC("S-ENC", sequenceCounter);
             byte[] sessionkeyArray = GaiaUtils.convertHexaStringToByteArray(sessionkey + sessionkey.substring(0, sessionkey.length() / 2));
 
@@ -213,6 +213,7 @@ public class Scp02
             return "848200001070CA81178C079A4A114998A816CBF511";
         }
         throw new UbiveloxException("일치하지 않음");
+
     }
 
 
